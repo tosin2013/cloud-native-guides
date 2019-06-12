@@ -21,7 +21,7 @@ modules:
   nodejs:
     name: Web UI with Node.js and AngularJS
   health:
-    name: Monitoring Application Health 
+    name: Monitoring Application Health
   fault-tolerance:
     name: Service Resilience and Fault Tolerance
   fault-tolerance-che:
@@ -36,5 +36,13 @@ modules:
     name:  Debugging Applications
   debug-che:
     name:  Debugging Applications
+  troubleshooting:
+    name:  Troubleshooting Applications
+  troubleshooting-che:
+    name:  Troubleshooting Applications
+  kibana:
+      name:  Navigating the Kibana Dashboard
+  kibana-che:
+    name:  Navigating the Kibana Dashboard
   env-info:
     name: "Appendix: Lab Env Info"

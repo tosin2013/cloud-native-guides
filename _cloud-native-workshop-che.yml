@@ -39,4 +39,6 @@ modules:
   - app-config
   - continuous-delivery-che
   - debug-che
+  - troubleshooting-che
+  - kibana-che
   - env-info

@@ -38,5 +38,6 @@ modules:
   - fault-tolerance
   - app-config
   - continuous-delivery
-  - debug
+  - debug  - troubleshooting
+  - kibana
   - env-info
