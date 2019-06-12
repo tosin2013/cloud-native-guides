@@ -71,9 +71,14 @@ Note that if you have used the above workshop installer, the lab instructions ar
 ```
 $ oc new-app quay.io/osevg/workshopper:latest --name=guides \
     -p LOG_TO_STDOUT=true \
-    -p WORKSHOPS_URLS="https://raw.githubusercontent.com/openshift-labs/cloud-native-guides/ocp-3.11/_cloud-native-workshop.yml"
+    -p WORKSHOPS_URLS="https://raw.githubusercontent.com/tosin2013/cloud-native-guides/ocp-3.11/_cloud-native-workshop.yml"
 $ oc expose svc/guides
 ```
+
+$ oc new-app quay.io/osevg/workshopper:latest --name=guides-che \
+    -p LOG_TO_STDOUT=true \
+    -p WORKSHOPS_URLS="https://raw.githubusercontent.com/tosin2013/cloud-native-guides/ocp-3.11/_cloud-native-workshop-che.yml"
+$ oc expose svc/guides-che
 
 Local Lab Instructions
 ===

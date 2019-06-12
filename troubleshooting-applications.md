@@ -1,18 +1,22 @@
 ## Troubleshooting Applications
 Below are common application troubleshooting techniques to use while developing an application.
 
-###  Image Pull failures
-**Things to consider..  Why did the container fail to pull**  
+###  Image Pull Failures
+
+Things to consider..  Why did the container fail to pull  
+
 * Image tags is incorrect
 * Images doesn’t exist (or is in a different registry)
 * Kubernetes doesn’t have permissions to pull that image
 
-**Create image that fails pull**
+Create image that fails pull
+
 ~~~shell
-oc  run fail --image=tcij1013/dne:v1.0.0
+$ oc  run fail --image=tcij1013/dne:v1.0.0
 ~~~
 
-**Check the status of the image**
+Check the status of the image
+
 ~~~shell
 $ oc get pods
 NAME                    READY     STATUS         RESTARTS   AGE
@@ -22,12 +26,14 @@ inventory-1-rd2hd       1/1       Running        0          41m
 inventory-s2i-1-build   0/1       Completed      0          42m
 ~~~
 
-**Inspect the pod**
+Inspect the pod
+
 ~~~shell
-oc describe pods fail-1-n6rbh
+$ oc describe pods fail-1-n6rbh
 ~~~
 
-**As we can see the pod failed because it could not pull down the image.**
+As we can see the pod failed because it could not pull down the image.
+
 ~~~shell
 Containers:
   fail:
@@ -45,20 +51,23 @@ Containers:
       memory:  1536Mi
 ~~~
 
-**Delete the deployment**
+Delete the deployment
+
 ~~~shell
 $ oc delete dc/fail
 deploymentconfig.apps.openshift.io "fail" deleted
 ~~~
 
-####  Application Crashing
+### Application Crashing
 
-**Create a new App called crashing-app**
+Create a new app called crashing-app
+
 ~~~shell
 $ oc new-app tcij1013/crashing-app:latest
 ~~~
 
-**View pods status to see that the container is in a CrashLoopBackOff**
+View pods status to see that the container is in a `CrashLoopBackOff`
+
 ~~~shell
 $ oc get pods
 NAME                    READY     STATUS             RESTARTS   AGE
@@ -67,7 +76,8 @@ inventory-1-rd2hd       1/1       Running            0          1h
 inventory-s2i-1-build   0/1       Completed          0          1h
 ~~~
 
-.**Review the pod status by running the oc describe command as seen below and look for the Reason under the State property.**
+.Review the pod status by running the oc describe command as seen below and look for the `Reason` under the `State` property.
+
 ~~~shell
 $ oc describe pod crashing-app-1-wg244
 ...
@@ -89,18 +99,22 @@ Containers:
     Restart Count:  3
 ~~~
 
-**View crashes from Events tab in UI**
+View crashes from Events tab in UI
+
 ![Crashing App UI]({% image_path troubleshooting-crashing-app-ui.png %}){:width="900px"}
 
-**Delete deployment**
+Delete deployment
+
 ~~~shell
 $ oc delete dc/crashing-app
 ~~~
 
-####  Invalid ConfigMap or Secret
-**Create one bad configmap yaml file**
+### Invalid ConfigMap or Secret
+
+Create one bad configmap yaml file
+
 ~~~shell
-cat >bad-configmap-pod.yml<<YAML
+$ cat >bad-configmap-pod.yml<<YAML
 # bad-configmap-pod.yml
 apiVersion: v1
 kind: Pod
@@ -120,19 +134,22 @@ spec:
 YAML
 ~~~
 
-**Create the bad configmap pod deployment**
+Create the bad configmap pod deployment
+
 ~~~shell
-oc create -f bad-configmap-pod.yml
+$ oc create -f bad-configmap-pod.yml
 ~~~
 
-**When we are getting the status of the pod we see that we have a CreateContainerConfigError**
+When we are getting the status of the pod we see that we have a `CreateContainerConfigError`
+
 ~~~shell
 $ oc get pods
 NAME                    READY     STATUS                       RESTARTS   AGE
 configmap-pod           0/1       CreateContainerConfigError   0          21s
 ~~~
 
-**When we run the `oc describe` command we see under State and reason the same error message.**
+When we run the `oc describe` command we see under State and reason the same error message.
+
 ~~~shell
 test-container:
    Container ID:
@@ -149,12 +166,14 @@ test-container:
    Ready:          False
 ~~~
 
-**Delete the bad configmap deployment**
+Delete the bad configmap deployment
+
 ~~~shell
-oc delete -f bad-configmap-pod.yml
+$ oc delete -f bad-configmap-pod.yml
 ~~~
 
-**Create a bad secret yaml file**
+Create a bad secret yaml file
+
 ~~~shell
 cat >bad-secret-pod.yml<<YAML
 # bad-secret-pod.yml
@@ -178,12 +197,14 @@ spec:
 YAML
 ~~~
 
-**Create the bad secret deployment**
+Create the bad secret deployment
+
 ~~~shell
-oc create -f bad-secret-pod.yml
+$ oc create -f bad-secret-pod.yml
 ~~~
 
-**Retrieve  the pod status**
+Retrieve  the pod status
+
 ~~~shell
 $ oc get pods
 NAME                    READY     STATUS              RESTARTS   AGE
@@ -192,7 +213,8 @@ inventory-s2i-1-build   0/1       Completed           0          1h
 secret-pod              0/1       ContainerCreating   0          4m
 ~~~
 
-**Check the reason for pod failure the Mount failed and timed out.**
+Check the reason for pod failure the mount failed and timed out.
+
 ~~~shell
 $ oc describe pod secret-pod
 Events:
@@ -204,24 +226,28 @@ Events:
 "secret-pod". list of unmounted volumes=[myothersecret]. list of unattached volumes=[myothersecret default-token-2x6zd]
 ~~~
 
-**Delete the bad secret deployment**
+Delete the bad secret deployment
+
 ~~~shell
-oc delete -f bad-secret-pod.yml
+$ oc delete -f bad-secret-pod.yml
 ~~~
 
-####  Liveness/Readiness Probe Failure
+### Liveness/Readiness Probe Failure
 
-**Things to consider..  Why did it fail?**
+Things to consider..  Why did it fail?
+
 * The Probes are incorrect - Check the health URL?
 * The probes are too sensitive - Does that application take a while for it to  start or respond?
 * The application is no longer responding correctly to the Probe - Could the database be misconfigured.
 
-**Provide a bad health configuration to Openshift**
+Provide a bad health configuration to OpenShift
+
 ~~~shell
-oc set probe dc/catalog --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/healthz
+$ oc set probe dc/catalog --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/healthz
 ~~~
 
-**use oc events to view the heatlh status.**
+Use oc events to view the health status.
+
 ~~~shell
 Events:
   Type     Reason     Age   From                                  Message
@@ -234,12 +260,14 @@ Events:
   Warning  Unhealthy  1s    kubelet, node1.atlanta-2c4e.internal  Liveness probe failed: Get http://10.1.2.127:8080/healthz: dial tcp 10.1.2.127:8080: connect: connection refused
 ~~~
 
-**View health check from Events tab in UI**
+View health check from `Events` tab in UI
+
 ![Health check]({% image_path troubleshooting-health-probe-failure.png %}){:width="900px"}
 
-####  Resource Quotas
+### Resource Quotas
 
-**Things to consider when resource quotas fail.**
+Things to consider when resource quotas fail.
+
 * Ask your cluster admin  to increase the Quota for this namespace.
 * Delete or scale back other deployments in this namespace
 * Go rogue and edit the Quota
@@ -248,7 +276,8 @@ Events:
 
 [Documentation](https://docs.openshift.com/container-platform/3.11/dev_guide/compute_resources.html#dev-quotas)
 
-**The limit below defines a 6Gi max of memory for each container in your project and a 12Gi max of memory for each Pod. The CPU limits are defined for 500m max 1000m will give you one CPU.**
+The limit below defines a 6Gi max of memory for each container in your project and a 12Gi max of memory for each Pod. The CPU limits are defined for 500m max 1000m will give you one CPU.
+
 ~~~shell
 $ oc describe limits
 Name:       coolstore-1-core-resource-limits
@@ -260,20 +289,23 @@ Container   cpu       -     -     50m              500m           -
 Pod         memory    6Mi   12Gi  -                -              -
 ~~~
 
-####  Exceeding CPU/Memory Limits
+### Exceeding CPU/Memory Limits
 
-**Things to consider..  why limits fail**
+Things to consider..  why limits fail
+
 * Ask your administrator to increase the limits
 * Reduce the Request or Limit settings for your deployment
 * Edit the limits `oc edit` live
 
 
-**Export the inventory deployment**
+Export the inventory deployment
+
 ~~~shell
-oc export dc inventory  > change-inventory.yml
+$ oc export dc inventory  > change-inventory.yml
 ~~~
 
-**vi change-inventory.yml and replace resources: with the below setting**
+vi change-inventory.yml and replace resources: with the below setting
+
 ~~~shell
 resources:
   requests:
@@ -284,35 +316,41 @@ resources:
    cpu: "1000m"
 ~~~
 
-**run the `oc apply -f` command to commit the changes**
+Run the `oc apply -f` command to commit the changes
+
 ~~~shell
-oc appply -f
+$ oc appply -f
 ~~~
 
-**View events CLI using the `oc events` command**
+View events CLI using the `oc events` command
+
 ~~~shell
 $ oc get events
 LAST SEEN   FIRST SEEN   COUNT     NAME                                  KIND                    SUBOBJECT                      TYPE      REASON              SOURCE                                 MESSAGE
-1m          4m           8         inventory-2.15a6f8f2b292e01d          ReplicationController                                  Warning   FailedCreate        replication-controller                 (combined from simil
-ar events): Error creating: pods "inventory-2-fxsjz" is forbidden: maximum memory usage per Container is 6Gi, but limit is 12Gi.
+1m          4m           8         inventory-2.15a6f8f2b292e01d          ReplicationController                                  Warning   FailedCreate        replication-controller                 (combined from similar events): Error creating: pods "inventory-2-fxsjz" is forbidden: maximum memory usage per Container is 6Gi, but limit is 12Gi.
 4m          4m           1         inventory.15a6f8f136328270            DeploymentConfig
 ~~~
 
-**View limit status  from Events tab in UI**
+View limit status  from `Events` tab in UI
+
 ![Limits Example]({% image_path troubleshooting-limits-example.png %}){:width="900px"}
 
-**remove the resources in change-inventory.yml**
+remove the resources in change-inventory.yml
+
 ~~~shell
 resources: {}
 ~~~
 
-**Update the changes to deployment to remove limit.**
+Update the changes to deployment to remove limit.
+
 ~~~shell
-oc apply -f change-inventory.yml
+$ oc apply -f change-inventory.yml
 ~~~
 
-####  Insufficient Cluster Resources
-**Collect the number of CPU REquests avialble in myour enviornment using the `oc describe` command.**
+### Insufficient Cluster Resources
+
+Collect the number of CPU Requests available in your environment using the `oc describe` command.
+
 ~~~shell
 $ oc describe ns coolstore-1
 Name:         coolstore-1
@@ -334,16 +372,18 @@ Resource Limits
  Container  memory    10Mi  6Gi   256Mi            1536Mi         -
  Container  cpu       -     -     50m              500m           -
  Pod        memory    6Mi   12Gi  -                -              -
- ~~~
+~~~
 
-**As we can see from the above command we are allow 500m by default. We can determine the allow of Cluster CPUS we will use with this information**
+As we can see from the above command we are allow 500m by default. We can determine the allow of Cluster CPUs we will use with this information
+
 ```
 10 Pods * (1 Container * 50m) = 500m == Cluster CPUs
 ```
 
-**In the cool store environment we are only allowed half a CPU because 1000m = 1 Cluster CPU and  we only have 500m**
+In the cool store environment we are only allowed half a CPU because 1000m = 1 Cluster CPU and  we only have 500m
 
-**lets try and increase the CPU requests to 1 in our change-inventory.yml**
+lets try and increase the CPU requests to 1 in our change-inventory.yml
+
 ~~~shell
 # add requests to resources in yaml file under spec: containers
 resources:
@@ -351,7 +391,8 @@ resources:
     cpu: 1
 ~~~
 
-**Review the `oc events` to see the cpu limit error message**
+Review the `oc events` to see the cpu limit error message
+
 ~~~shell
 $ oc get events
 LAST SEEN   FIRST SEEN   COUNT     NAME                                  KIND                    SUBOBJECT                     TYPE      REASON              SOURCE                                 MESSAGE
@@ -364,49 +405,56 @@ tory-4-c6wb8" is invalid: spec.containers[0].resources.requests: Invalid value: 
 ![Insufficient Cluster Resources]({% image_path troubleshooting-insufficient-cluster-resources.png %}){:width="900px"}
 
 
-**Optional change the cpu value to `cpu: 500m` to see the result**
+**Optional:** change the cpu value to `cpu: 500m` to see the result
+
 ~~~shell 
 resources:
   requests:
     cpu: 500m
 ~~~
 
-**remove the resources in change-inventory.yml**
+Remove the resources in change-inventory.yml
+
 ~~~shell
 resources: {}
 ~~~
 
-**Update the changes to deployment to  CPU requests.**
+Update the changes to deployment to  CPU requests.
+
 ~~~shell
-oc apply -f change-inventory.yml
+$ oc apply -f change-inventory.yml
 ~~~
-####  PersistentVolume fails to mount
 
+### Validation Errors
 
-####  Validation Errors
-**Edit the change-inventory.yml apiVersion**
+Edit the change-inventory.yml apiVersion
+
 ~~~shell
 apiVersion: v00000
 ~~~
 
-**Run the `oc apply` command with `--dry-run --validate=true` flags**
+Run the `oc apply` command with `--dry-run --validate=true` flags
+
 ~~~shell
 $ oc apply -f change-inventory.yml --dry-run --validate=true
 error: unable to recognize "change-inventory.yml": no matches for kind "DeploymentConfig" in version "apps.openshift.io/v00000"
 ~~~
 
-**Change apiVersion back to v1**
+Change apiVersion back to v1
+
 ~~~shell
 apiVersion: v1
 ~~~
 
-**Add two extra spaces to  `annotations` under `metadata`**
+Add two extra spaces to  `annotations` under `metadata`
+
 ~~~shell  
 metadata:
     annotations:
 ~~~
 
-**Review the error below using the `python -c` command***
+Review the error below using the `python -c` command
+
 ~~~shell 
 $ python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' <  change-inventory.yml
 Traceback (most recent call last):
@@ -435,54 +483,63 @@ expected <block end>, but found '<block mapping start>'
   in "<stdin>", line 9, column 3
 ~~~
 
-**YAML validation using python**
-* python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < test-application.deployment.yaml
-**Validate kubernetes API objects using the -- dry-run flag** 
-* oc create -f test-application.deploy.yaml --dry-run --validate=true
+YAML validation using python  
+
+* `python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < test-application.deployment.yaml` 
+
+Validate kubernetes API objects using the -- dry-run flag   
+
+* `oc create -f test-application.deploy.yaml --dry-run --validate=true`  
 
 
-####  Container not updating
-**An example of a container not updating can be due to the following scenario**
-1. Creating a Deployment using an image tag (e.g. `tcij1013/myapp:v1`)
-2. Notice there is a bug in `myapp`
-3. Build a new image and push the to the same tag (`tcij1013/myapp:v1`)
-4. Delete all the `myapp` Podxs, and watch the new ones get crearted by the Deployment
-5. Realize that the bug is still present
+### Container not updating  
 
-This problem relates to how Kubernetes decidez wheater tgo do a docker pull when starting a container in a Pod. 
+An example of a container not updating can be due to the following scenario  
 
-In the V1.Container Specifi ation there's an option call `ImagePullPolicy`:
+1. Creating a deployment using an image tag (e.g. `tcij1013/myapp:v1`)  
+2. Notice there is a bug in `myapp`  
+3. Build a new image and push the to the same tag (`tcij1013/myapp:v1`)  
+4. Delete all the `myapp` Pods, and watch the new ones get created by the deployment  
+5. Realize that the bug is still present  
 
-> Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+This problem relates to how Kubernetes decide weather to go do a docker pull when starting a container in a Pod.  
 
-Simce the image is tagged as `v1` in the above example the default pull policy is IfNotPresent. The Openshift cluster already has a local copy of `tcij1013/myapp:v1`, so it does not attempt to do a `docker pull`. When the new Pods come up, theere still using thee old broken container image.  
+In the V1.Container specification there's an option call `ImagePullPolicy`:  
 
-**Ways to resolve this issue**
-1. Use unique tags (e.g. based on your source control commit id)
-2. Specify ImagePullPolicy: Always in your Deployment.
+> Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.  
+
+Since the image is tagged as `v1` in the above example the default pull policy is IfNotPresent. The OpenShift cluster already has a local copy of `tcij1013/myapp:v1`, so it does not attempt to do a `docker pull`. When the new Pods come up, there still using thee old broken container image.  
+
+Ways to resolve this issue  
+
+1. Use unique tags (e.g. based on your source control commit id)  
+2. Specify ImagePullPolicy: Always in your deployment.  
 
 
-####  Troubleshooting access to containers
-We will be discussing how to troubleshoot access to  your pods and containers from external endpoints and internal endpoints.
+### Troubleshooting access to containers  
+
+We will be discussing how to troubleshoot access to  your pods and containers from external endpoints and internal endpoints.  
 
 [Troubleshooting OpenShift SDN](https://docs.openshift.com/container-platform/3.11/admin_guide/sdn_troubleshooting.html#overview)  
 
-[List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
+[List of HTTP status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)  
+
+> 1xx (Informational): The request was received, continuing process  
+2xx (Successful): The request was successfully received, understood, and accepted  
+3xx (Redirection): Further action needs to be taken in order to complete the request  
+4xx (Client Error): The request contains bad syntax or cannot be fulfilled  
+5xx (Server Error): The server failed to fulfill an apparently valid request  
+
+
+Get the web external endpoint for the coolstore application  
+
 ~~~shell
-1xx (Informational): The request was received, continuing process
-2xx (Successful): The request was successfully received, understood, and accepted
-3xx (Redirection): Further action needs to be taken in order to complete the request
-4xx (Client Error): The request contains bad syntax or cannot be fulfilled
-5xx (Server Error): The server failed to fulfill an apparently valid request
+$ ENDPOINT=http://$(oc get route | grep web | awk '{print $2}')
+$ echo $ENDPOINT
 ~~~
 
-**Get the web external endpoint for the coolstore application**
-~~~shell
-ENDPOINT=http://$(oc get route | grep web | awk '{print $2}')
-echo $ENDPOINT
-~~~
+Debugging External Access to an HTTP Service note the HTTP status is 200  
 
-**Debugging External Access to an HTTP Service note the HTTP status is 200**
 ~~~shell 
 $ curl -kv  $ENDPOINT
 * About to connect() to web-coolstore-1.apps.atlanta-2c4e.openshiftworkshop.com port 80 (#0)
@@ -507,37 +564,37 @@ $ curl -kv  $ENDPOINT
 < Cache-control: private
 ~~~
 
-**Other tests against External Endpoint**  
-Test that the DNS resolves to domain name
+Other tests against External Endpoint  
+
+Test that the DNS resolves to domain name  
+
 ~~~shell
-dig +short yourapp.example.com 
-~~~
-Use the ip address ping to check if you can reach the router host. 
-~~~shell
-ping -c 192.168.1.44
-~~~
-Use the telnet command to ensure that the port is open
-~~~shell
-telnet 192.168.1.44 80
+$ dig +short yourapp.example.com 
 ~~~
 
-**Get the web service endpoint for the coolstore application**
+Use the ip address ping to check if you can reach the router host.  
+
 ~~~shell
- SERVICE_ENDPOINT=http://$(oc get service | grep web |  awk '{print $3}')
- echo $ SERVICE_ENDPOINT
+$ ping -c 192.168.1.44
 ~~~
 
-**Debugging a Service note the HTTP status is 200**
+Use the telnet command to ensure that the port is open  
+
 ~~~shell
-$ curl -kv SERVICE_ENDPOINT
-* Could not resolve host: SERVICE_ENDPOINT; Unknown error
-* Closing connection 0
-curl: (6) Could not resolve host: SERVICE_ENDPOINT; Unknown error
-[user@workspaceqqqbakbkzcldvrs6 projects]$ curl -kv SERVICE_ENDPOINT:8080
-* Could not resolve host: SERVICE_ENDPOINT; Unknown error
-* Closing connection 0
-curl: (6) Could not resolve host: SERVICE_ENDPOINT; Unknown error
-[user@workspaceqqqbakbkzcldvrs6 projects]$ curl -kv $SERVICE_ENDPOINT:8080
+$ telnet 192.168.1.44 80
+~~~
+
+Get the web service endpoint for the coolstore application  
+
+~~~shell
+$ SERVICE_ENDPOINT=http://$(oc get service | grep web |  awk '{print $3}')
+$ echo $SERVICE_ENDPOINT
+~~~
+
+Debugging a Service note the HTTP status is 200  
+
+~~~shell
+$ curl -kv $SERVICE_ENDPOINT:8080
 * About to connect() to 172.30.223.115 port 8080 (#0)
 *   Trying 172.30.223.115...
 * Connected to 172.30.223.115 (172.30.223.115) port 8080 (#0)
@@ -559,14 +616,20 @@ curl: (6) Could not resolve host: SERVICE_ENDPOINT; Unknown error
 < Connection: keep-alive
 ~~~
 
-Refer to the HTTP status code referance anytime you get a invalid code such as 404. 
+Refer to the HTTP status code reference anytime you get a invalid code such as 404.   
 
-**Other tests against Service Endpoint**  
-Use the ip address ping to check if you can reach the router host. 
+Other tests against Service Endpoint  
+
+Use the ip address ping to check if you can reach the router host.  
+
 ~~~shell
-ping -c 192.168.1.44
-~~~
-Use the telnet command to ensure that the port is open
+$ ping -c 192.168.1.44
+~~~  
+
+Use the telnet command to ensure that the port is open  
+
 ~~~shell
-telnet 192.168.1.44 80
-~~~
+$ telnet 192.168.1.44 80
+~~~ 
+
+Well done! You are ready for the next lab.

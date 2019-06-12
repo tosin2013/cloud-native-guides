@@ -268,3 +268,5 @@ Below is an example  steps of configuring a java application to use fluentd.
     ~~~shell
     tail  -f /var/log/td-agent/td-agent.log 
     ~~~
+    
+Well done! You are ready for the next lab.
