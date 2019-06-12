@@ -2,7 +2,7 @@ id: "cloudnative"
 name: "OpenShift Cloud-Native Workshop"
 
 content:
-  url: https://raw.githubusercontent.com/openshift-labs/cloud-native-guides/ocp-3.11
+  url: https://raw.githubusercontent.com/tosin2013/cloud-native-guides/ocp-3.11
 
 vars:
   OPENSHIFT_DOCS_BASE: "https://docs.openshift.com/container-platform/3.11"
