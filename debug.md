@@ -388,4 +388,4 @@ the inventory status as _Not in Stock_.
 
 ![Inventory Status Bug Fixed]({% image_path debug-coolstore-bug-fixed.png %}){:width="800px"}
 
-Well done and congratulations for completing all the labs.
+Well done! You are ready for the next lab.
