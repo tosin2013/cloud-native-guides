@@ -36,13 +36,9 @@ modules:
     name:  Debugging Applications
   debug-che:
     name:  Debugging Applications
-  troubleshooting:
+  troubleshooting-applications:
     name:  Troubleshooting Applications
-  troubleshooting-che:
-    name:  Troubleshooting Applications
-  kibana:
+  kibana-dashboard:
       name:  Navigating the Kibana Dashboard
-  kibana-che:
-    name:  Navigating the Kibana Dashboard
   env-info:
     name: "Appendix: Lab Env Info"
