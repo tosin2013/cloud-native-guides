@@ -307,4 +307,20 @@ Once your app is running logs will report to td-agent.log
 tail  -f /var/log/td-agent/td-agent.log 
 ~~~
 
+#### Logging best practices on OpenShift
+1. Use the approriate tool for the job 
+Look at using standard logging frameworks when writing  your application.  Popular frameworks that work with Java are Log4J and SLF4J.
+2. Follow the approprate logging levels. When you choose a logging framework it should cover the logging levels below. 
+
+    * **ERROR** - Use this when something terribly wrong has happened, and must be investigated immediately. No system can tolerate items logged on this level. 
+    * **WARN** - this process might be continued, but take extra caution.
+    * **INFO** - Important business information hs finished. Inm the ideal world you should be able to look at this message and know what the application is doing. 
+    * **DEBUG** - fine-grained informational events that are most useful to debug an application. 
+    * **TRACE** - This is very detailed information. Intended only for development, You may want to keep trace messages for a short period of time after deployment on production environment, treat theses log statements aas temporary, and should be turned-off eventually. TRACE logs are finer-grained than the events generated from DEBUG.
+    * **FATAL** - This defines a very severe event that will presumably lead the application to abort. 
+
+3. Know what you are logging abd be concise and descriptive- Make sure the log will be understandable to someone who is running the application.  It will cause less confusion in the future.
+4. The logging statements should have little or no  impact on the applications behavior. You do not want to starve the server from excessive logging. 
+5. Make sure your logs are easy to read and easy to parse.  There are two groups of users for your logs. Human beings and computers logs should be suitable for both of these groups. 
+
 Well done and congratulations for completing all the labs.
