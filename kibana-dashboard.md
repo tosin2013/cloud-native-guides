@@ -223,30 +223,74 @@ Generate some messages
 ~~~shell
 ENDPOINT=http://$(oc get route | grep gateway | awk '{print $2}')
 echo $ENDPOINT/api/products
-for i in {1..20}; do
+for i in {1..100}; do
   curl -s -k $ENDPOINT/api/products
-  sleep 1s
+  echo "\n"
+  sleep 5s
 done
 ~~~
 
-#### Create Visualization  
+While script is running continue on to next steps
+
+#### Save error filter  
+
+1. search using the following query `(kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:gateway  AND message:*status code*)`
+2. click on Save
+3. Save search name as `Vert.x Status Code`
+
+#### Create Visualization Graph
 
 1. Click on `Visualize`  
 2. Click on `Create a visualization`  
-3. Click on `Metric`  
-4. Click  on `Namespace Errors` under the `Or, From a Saved Search`  menu.  
-5. Click on Save  
-6. Save Visualization as `Vert.x Status Code`  
+3. Click on `Line`  
+4. Click  on `Vert.x Status Code` under the `Or, From a Saved Search`  menu.  
+5. Add `X-Axis` Filter Aggregation on `Date Histogram`
+6. Set the Interval to `Minute`
+7. Add a custom label to the `Y-Axis` call the label `status code (204)`
+8. Click on the play button above the `Y-Axis` icon
+9. This should display your graph.
+10. click on save  
+11. Save Visualization as `Vert.x Status Code`  
 
 
-#### Create Dashboard  
+![Vert.x Status Code]({% image_path kibana-status-code-graph.png %}){:width="900px"}
+
+
+#### Add Vert.x Status Code to Dashboard  
 
 1. Click on `Dashboard`  
-2. Click on `Create a dashboard`  
+2. Click on `Main Dashboard`  
+3. Click on `Edit`  
 3. Click on `Add`  
 4. Click on the `Vert.x Status Code` under Visualization  
 5. click on save  
-6. Save dashboard as `Main Dashboard`  
+6. Save dashboard `Main Dashboard`  
+
+
+The gateway is using the SLF4J library for logging
+You can review calls to the SLF4J function in the `src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java` file
+
+~~~java
+line 78:  LOG.warn("Inventory error for {}: status code {}",
+~~~
+
+[SLF4J user manual](https://www.slf4j.org/manual.html)
+
+#### Logging best practices on OpenShift
+1. Use the appropriate tool for the job 
+Look at using standard logging frameworks when writing  your application.  Popular frameworks that work with Java are Log4J and SLF4J.
+2. Follow the appropriate logging levels. When you choose a logging framework it should cover the logging levels below. 
+
+    * **ERROR** - Use this when something terribly wrong has happened, and must be investigated immediately. No system can tolerate items logged on this level. 
+    * **WARN** - this process might be continued, but take extra caution.
+    * **INFO** - Important business information hs finished. Inm the ideal world you should be able to look at this message and know what the application is doing. 
+    * **DEBUG** - fine-grained informational events that are most useful to debug an application. 
+    * **TRACE** - This is very detailed information. Intended only for development, You may want to keep trace messages for a short period of time after deployment on production environment, treat theses log statements aas temporary, and should be turned-off eventually. TRACE logs are finer-grained than the events generated from DEBUG.
+    * **FATAL** - This defines a very severe event that will presumably lead the application to abort. 
+
+3. Know what you are logging abd be concise and descriptive- Make sure the log will be understandable to someone who is running the application.  It will cause less confusion in the future.
+4. The logging statements should have little or no  impact on the applications behavior. You do not want to starve the server from excessive logging. 
+5. Make sure your logs are easy to read and easy to parse.  There are two groups of users for your logs. Human beings and computers logs should be suitable for both of these groups. 
 
 #### Fluentd Java Example  
 
@@ -307,20 +351,5 @@ Once your app is running logs will report to td-agent.log
 tail  -f /var/log/td-agent/td-agent.log 
 ~~~
 
-#### Logging best practices on OpenShift
-1. Use the appropriate tool for the job 
-Look at using standard logging frameworks when writing  your application.  Popular frameworks that work with Java are Log4J and SLF4J.
-2. Follow the appropriate logging levels. When you choose a logging framework it should cover the logging levels below. 
-
-    * **ERROR** - Use this when something terribly wrong has happened, and must be investigated immediately. No system can tolerate items logged on this level. 
-    * **WARN** - this process might be continued, but take extra caution.
-    * **INFO** - Important business information hs finished. Inm the ideal world you should be able to look at this message and know what the application is doing. 
-    * **DEBUG** - fine-grained informational events that are most useful to debug an application. 
-    * **TRACE** - This is very detailed information. Intended only for development, You may want to keep trace messages for a short period of time after deployment on production environment, treat theses log statements aas temporary, and should be turned-off eventually. TRACE logs are finer-grained than the events generated from DEBUG.
-    * **FATAL** - This defines a very severe event that will presumably lead the application to abort. 
-
-3. Know what you are logging abd be concise and descriptive- Make sure the log will be understandable to someone who is running the application.  It will cause less confusion in the future.
-4. The logging statements should have little or no  impact on the applications behavior. You do not want to starve the server from excessive logging. 
-5. Make sure your logs are easy to read and easy to parse.  There are two groups of users for your logs. Human beings and computers logs should be suitable for both of these groups. 
 
 Well done and congratulations for completing all the labs.
