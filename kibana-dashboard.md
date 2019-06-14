@@ -10,7 +10,7 @@ ELK stands for
 
 What is Fluentd?  
 
-**Fluentd** is a popular opensource data collector that is setup on the openshift luster to tail container logs files, filter and transform the log data and deliver it to the ElasticSEarch cluster. From there the logs will be indexed and stored.  
+**Fluentd** is a popular opensource data collector that is setup on the OpenShift cluster to tail container logs files, filter and transform the log data and deliver it to the ElasticSearch cluster. From there the logs will be indexed and stored.  
 
 Log Analysis  
 
@@ -27,8 +27,8 @@ Log Stash Processing
 
 Logstash processing take place in three stages  
 
-* **Input**- The input stage is how Log stash receives the data. An input plugin cloud be a file so that Logostash reads events from a file; and HTTP endpoint; a relational  database, etc.  
-* **Filter** - THe stage is about how Logstash processes the events recieved from the input stage plugins. Here CSV, XML or JSON can be parsed. Data enrichment operations can be performed such as look up an IP address and resolving is geographical location.  
+* **Input**- The input stage is how Logstash receives the data. An input plugin cloud be a file so that Logstash reads events from a file; and HTTP endpoint; a relational  database, etc.  
+* **Filter** - This stage is about how Logstash processes the events received from the input stage plugins. Here CSV, XML or JSON can be parsed. Data enrichment operations can be performed such as look up an IP address and resolving is geographical location.  
 * **Output** - And output plugin is where we send the processed events to. These can be referred to as stashes. These place can be na databases, a file, and ElasticSearch instance and so on.  
 
 Sample logstash config
@@ -308,9 +308,9 @@ tail  -f /var/log/td-agent/td-agent.log
 ~~~
 
 #### Logging best practices on OpenShift
-1. Use the approriate tool for the job 
+1. Use the appropriate tool for the job 
 Look at using standard logging frameworks when writing  your application.  Popular frameworks that work with Java are Log4J and SLF4J.
-2. Follow the approprate logging levels. When you choose a logging framework it should cover the logging levels below. 
+2. Follow the appropriate logging levels. When you choose a logging framework it should cover the logging levels below. 
 
     * **ERROR** - Use this when something terribly wrong has happened, and must be investigated immediately. No system can tolerate items logged on this level. 
     * **WARN** - this process might be continued, but take extra caution.
