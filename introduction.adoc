@@ -20,13 +20,13 @@ The outcome is you will be able to use tools technologies such as Kibana and Pro
 ### The importance of Monitoring systems
 While developing applications on OpenShift it is very important to have good monitoring. This is important because we need 
 to know what is really going on with our services that we build. We must know what the service is doing  how how it is behaving. 
-While developing (CI/CD)[https://www.redhat.com/en/topics/devops/what-is-ci-cd] pipelines it is important to have monitoring in all states of the process. It is especially 
+While developing [CI/CD](https://www.redhat.com/en/topics/devops/what-is-ci-cd) pipelines it is important to have monitoring in all states of the process. It is especially 
 important to have this during the release stage.
 
 Monitoring is normally used to access and report the overall health of your systems and/or services. Here are some things below
 to consider while monitoring your application. 
 
-* **Error Rate** - this metric will tell you the rate of requests that are failing for example the number of (500)[] error that a web service may generate. 
+* **Error Rate** - this metric will tell you the rate of requests that are failing for example the number of `500` error that a web service may generate. 
 * **Latency** - will tell you the time it took for your service to process a request. This is normally broken down to latency of successful and unsuccessful requests. 
 * **Utilization** - will give you the information about the usage of different pieces of your system. For example, if you wanted to 
 monitor the utilization of nodes on your OpenShift cluster. You would make sure things such as memory, disk and CPU usage are in normal ranges. 
