@@ -1,0 +1,44 @@
+== Introduction 
+
+_2 MINUTE EXERCISE_
+
+In this workshop you will learn how to troubleshoot log and monitor applications on OpenShift. 
+
+We will go through the following exercises below:
+
+* Introduction to Logging and Monitoring on OpenShift
+* Troubleshooting Applications on OpenShift
+* Building Sample Application used for Logging and Monitoring 
+* Kibana Dashboard for Developers 
+* Prometheus internals
+* Application monitoring in OpenShift with Prometheus and Grafana 
+* Prometheus and Grafana for OpenShift Operators and SRE's
+
+
+The outcome is you will be able to use tools technologies such as Kibana and Prometheus. To help you troubleshoot issues that you may run into while developing a cloud native application. 
+
+### The importance of Monitoring systems
+While developing applications on OpenShift it is very important to have good monitoring. This is important because we need 
+to know what is really going on with our services that we build. We must know what the service is doing  how how it is behaving. 
+While developing (CI/CD)[https://www.redhat.com/en/topics/devops/what-is-ci-cd] pipelines it is important to have monitoring in all states of the process. It is especially 
+important to have this during the release stage.
+
+Monitoring is normally used to access and report the overall health of your systems and/or services. Here are some things below
+to consider while monitoring your application. 
+
+* **Error Rate** - this metric will tell you the rate of requests that are failing for example the number of (500)[] error that a web service may generate. 
+* **Latency** - will tell you the time it took for your service to process a request. This is normally broken down to latency of successful and unsuccessful requests. 
+* **Utilization** - will give you the information about the usage of different pieces of your system. For example, if you wanted to 
+monitor the utilization of nodes on your OpenShift cluster. You would make sure things such as memory, disk and CPU usage are in normal ranges. 
+
+#### Collecting Metics
+Prometheus which comes with OpenShift is used for scraping and collecting metrics from your services. Prometheus is containerized so it easily run in 
+you OpenShift platform. We go over more about prometheus later in this lab.
+
+### The importance of Logging on systems 
+Logging is a very important part of the system to allow you to make your service and functions more observable. Logs 
+are the stream of aggregated, time ordered events  that are collected from  the output streams of your  services. When 
+writing a cloud native application you should never write your logs to  file. We want to send them to as an event stream to stdout
+that what your logs can be consumed by other services in your environment.  We will go further into logging when we go over kibana. 
+
+Let's start the workshop with the how to troubleshoot applications on OpenShift.
