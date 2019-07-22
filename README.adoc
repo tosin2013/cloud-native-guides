@@ -1,5 +1,7 @@
+# WIP i will push this to github once it is compelte feel free to add a topic to the agenda in the issues.
+
 == OpenShift Logging and Monitoring Workshop image:https://api.travis-ci.org/openshift-labs/openshift-logging-monitoring.svg?branch=ocp-3.11[Build Status,link=https://travis-ci.org/openshift-labs/openshift-logging-monitoring]
-WIP i will pushs this to github once it is compelte
+
 This one day hands-on cloud-native workshops provides developers and introduction to cloud-natives applications and gives them an experience of building cloud-native applications using OpenShift, Spring Boot, WildFly Swarm, Vert.xt and more.
 
 == Agenda
