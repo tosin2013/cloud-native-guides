@@ -1,0 +1,230 @@
+- name: cloud-native-workshop-apb playbook to provision the application
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    openshift_user: 
+    openshift_password: 
+    openshift_token:
+    openshift_master_url: 
+    openshift_user_password: openshift
+    git_repository_lab_path: openshift-labs/cloud-native-labs
+    git_repository_lab_reference: ocp-3.11
+    git_repository_guide_path: openshift-labs/cloud-native-guides
+    git_repository_guide_reference: ocp-3.11
+    git_repository_guide_context:
+    guide_name: codeready
+    gogs_dev_user: developer
+    gogs_pwd: openshift
+    infrasvcs_adm_user: adminuser
+    infrasvcs_adm_pwd: adminpwd
+    user_count: 5
+    openshift_service_mesh_installation: true
+    preconfigure_service_mesh_projects: true
+    preconfigure_squash: false
+
+  roles:
+  - role: ansible.kubernetes-modules
+    install_python_requirements: no
+  - role: ansibleplaybookbundle.asb-modules
+
+  tasks:    
+  - name: login as super user with token
+    shell: "oc login --token={{ openshift_token }} --insecure-skip-tls-verify=true"
+    when:
+      - openshift_token is defined
+      - openshift_token is not none
+      - openshift_token|trim() != ""
+    tags: always
+
+  - name: login as super user with pwd
+    shell: "oc login -u {{ openshift_user }} -p {{ openshift_password }} --insecure-skip-tls-verify=true"
+    when: >
+      openshift_token is not defined or
+      openshift_token is none or
+      openshift_token|trim() == ""
+    tags: always
+
+  - name: extract app route suffix from openshift-console
+    block:
+      - shell: "oc get route console -n openshift-console -o 'jsonpath={.spec.host}'"
+        register: console_route
+      - set_fact:
+          apps_hostname_suffix: "{{ console_route.stdout |regex_replace('^console\\.(.*)$', '\\1') }}"
+    tags: always
+
+  - name: delete project quota
+    shell: "oc delete limitrange --all -n {{ namespace }}"
+    ignore_errors: true
+    tags: always
+
+  # Etherpad
+  - name: install etherpad
+    include: "{{ playbook_dir }}/tasks/install_etherpad.yml"
+    tags: etherpad
+
+  - import_role:
+      name: openshift_sonatype_nexus
+    vars:
+      project_name: "{{ namespace }}"
+      nexus_image_version: 3.12.1
+      nexus_max_memory: 6Gi
+    tags: nexus
+
+  - import_role:
+      name: openshift_gogs
+    vars:
+      project_name: "{{ namespace }}"
+      gogs_route: "gogs-{{ namespace }}.{{ apps_hostname_suffix }}"
+      gogs_image_version: 0.11.34
+      gogs_admin_user: "{{ infrasvcs_adm_user }}"
+      gogs_admin_password: "{{ infrasvcs_adm_pwd }}"
+      gogs_user: "{{ gogs_dev_user }}"
+      gogs_password: "{{ gogs_pwd }}"
+    tags: gogs
+
+  # install openjdk imagestream
+  - name: get openjdk image stream
+    shell: "oc get is java -n openshift"
+    register: java_imagestream_result
+    ignore_errors: true
+    tags: jdk
+
+  - name: install java image stream
+    shell: "oc apply -n openshift -f https://raw.githubusercontent.com/jboss-openshift/application-templates/master/openjdk/openjdk18-image-stream.json"
+    when: java_imagestream_result is failed
+    tags: jdk
+
+  # update jenkins templates
+  - import_role:
+      name: openshift_jenkins
+    vars:
+      update_jenkins_templates: true
+      jenkins_template_disable_admin_monitors: true
+      deploy_jenkins: false
+      jenkins_max_cpu: 2
+      jenkins_max_mem: 2Gi
+
+  # install CodeReady Workspaces
+  - name: Deploy CodeReady Workspaces
+    command: "{{ playbook_dir }}/codeready-workspaces-operator-installer/deploy.sh --deploy --oauth --project={{ namespace }}" 
+    register: cmd_result
+    changed_when: true
+    
+  - name: get CodeReady Workspaces URL
+    command: "oc get routes codeready --template={% raw %}'{{ .spec.host }}'{% endraw %} -n {{ namespace }}"
+    register: cmd_result
+    changed_when: true
+
+  - name: init 'codeready_url' variable
+    set_fact:
+      codeready_url: "{{ cmd_result.stdout }}"
+
+  - name: get RHSSO URL
+    command: "oc get routes keycloak --template={% raw %}'{{ .spec.host }}'{% endraw %} -n {{ namespace }}"
+    register: cmd_result
+    changed_when: true
+
+  - name: init 'rhsso_url' variable
+    set_fact:
+      rhsso_url: "{{ cmd_result.stdout }}"
+
+  - name: wait for CodeReady Workspaces to be running
+    uri:
+      url: "http://{{ codeready_url }}/api/system/state"
+      status_code: 200
+    register: result
+    until: result.status == 200
+    retries: 60
+    delay: 30
+
+  # Import custom stacks
+  - name: Create Cloud-Native stack
+    command: >
+      oc import-image che-cloud-native:latest
+       -n openshift
+       --from=quay.io/mcouliba/che-cloud-native --confirm
+       
+  - name: Import custom stacks
+    include: "{{ playbook_dir }}/tasks/add_custom_stack.yml"
+    vars:
+      stack_template: "{{ item }}"
+    with_fileglob:
+    - "{{ playbook_dir }}/templates/stacks/*-stack.json.j2"
+
+  # Install Service Mesh
+  - name: check if istio-system project exists
+    command: "oc get project istio-system"
+    register: istio_system_project_result
+    ignore_errors: true
+    changed_when: false
+  - name: Openshift Service Mesh Installation
+    block:
+      - name: create istio-operator project
+        command: "oc new-project istio-operator"
+      - name: deploy istio operator
+        command: >
+          oc apply -n istio-operator 
+          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.10/deploy/servicemesh-operator.yaml
+      - name: create istio-system project
+        command: "oc new-project istio-system"
+      - name: delete project quota
+        shell: "oc delete limitrange --all -n istio-system"
+        ignore_errors: true
+      - name: deploy istio
+        command: >
+          oc create -n istio-system 
+          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.10/deploy/examples/istio_v1alpha3_controlplane_cr_basic.yaml
+    when: 
+      - istio_system_project_result is failed
+      - openshift_service_mesh_installation or preconfigure_service_mesh_projects
+
+  # Get Jaeger and Grafana URL
+  - name: get Jaeger URL
+    command: "oc get route jaeger-query -o 'jsonpath={.spec.host}' -n istio-system"
+    register: jaeger_host
+    until: jaeger_host.rc == 0
+    retries: 60
+    delay: 30
+  - name: init 'jaeger_url' variable
+    set_fact:
+      jaeger_url: "https://{{ jaeger_host.stdout }}"
+  - name: get Grafana URL
+    command: "oc get route grafana -o 'jsonpath={.spec.host}' -n istio-system"
+    register: grafana_host
+    until: grafana_host.rc == 0
+    retries: 60
+    delay: 30
+  - name: init 'grafana_url' variable
+    set_fact:
+      grafana_url: "http://{{ grafana_host.stdout }}"
+
+  # Preconfigure Projects for Service Mesh usage
+  - name: preconfigure projects for service mesh
+    include: "{{ playbook_dir }}/tasks/create_project_service_mesh.yml"
+    vars:
+      username: "{{ 'user%d' | format(item) }}"
+      project_name: "{{ 'coolstore%d' | format(item) }}"
+      infra_project_name: "{{ 'infra%d' | format(item) }}"
+    loop: "{{ range(1, user_count|int + 1) | list }}"
+    when: 
+      - preconfigure_service_mesh_projects
+  
+  # Preconfigure cluster for Squash
+  - name: preconfigure cluster for Squash
+    command: >
+      oc create clusterrolebinding cluster-admin-binding-debug-1 \ 
+      --clusterrole=cluster-admin \
+      --user=system:serviceaccount:lab-infra:che-workspace
+    when: 
+      - preconfigure_squash
+  - name: preconfigure infra project for Squash
+    command: >
+      oc create clusterrolebinding cluster-admin-squash-plank-{{ infra_project_name }} \ 
+      --clusterrole=cluster-admin \
+      --user=system:serviceaccount:{{ infra_project_name }}:squash-plank
+    vars:
+      infra_project_name: "{{ 'infra%d' | format(item) }}"
+    loop: "{{ range(1, user_count|int + 1) | list }}"
+    when: 
+      - preconfigure_squash
