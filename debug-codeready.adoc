@@ -1,5 +1,10 @@
 ## Debugging Applications
 
+## TO-DO 
+**Notes** 
+* delete old builder image 
+* may have to pull code from solutions repo to repa
+
 *20 MINUTE EXERCISE*
 
 In this lab you will debug the CoolStore application using Java remote debugging and 
