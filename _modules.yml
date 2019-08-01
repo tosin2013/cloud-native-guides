@@ -6,6 +6,8 @@ modules:
     name: Introduction
   getting-started-codeready:
     name: Getting Started
+  prepare-coolstore-env:
+    name: Prepare coolstore environment 
   catalog-spring-boot-codeready:
     name: Create Catalog Service as a Microservice with Spring Boot
   catalog-deployment:

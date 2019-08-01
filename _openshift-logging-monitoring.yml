@@ -23,6 +23,7 @@ vars:
   API_GATEWAY_ROUTE_HOST: API-GATEWAY-ROUTE-HOST
   GRAFANA_ROUTE_HOST: GRAFANA-ROUTE-HOST
   PROMETHEUS_ROUTE_HOST: PROMETHEUS-ROUTE-HOST
+  COOLSTORE_ROUTE_HOST: COOLSTORE-ROUTE-HOST
   ECLIPSE_CHE_URL: "http://che-lab-infra.192.168.99.100.nip.io"
   GIT_URL: "http://gogs-lab-infra.192.168.99.100.nip.io"
   NEXUS_URL: "http://nexus.lab-infra.svc:8081/repository/maven-all-public"
