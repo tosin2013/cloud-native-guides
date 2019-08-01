@@ -1,21 +1,22 @@
-## Prometheus for app developers
+= Prometheus for App Developers
 
-### What is Prometheus and Grafana
+== What is Prometheus and Grafana
 **Prometheus** is  an open-source systems monitoring and alerting toolkit. Which was originally built at SoundCloud. Since its beginnings in 2012
  many companies and organizations have started using Prometheus. As a result Prometheus is now a standalone open-source project and it is maintained
- independently of any company. Prometheus is also built into [OpenShift](https://docs.openshift.com/container-platform/3.11/install_config/prometheus_cluster_monitoring.html) it is used to monitor the overall infrastructure of OpenShift for operators.
+ independently of any company. Prometheus is also built into https://docs.openshift.com/container-platform/3.11/install_config/prometheus_cluster_monitoring.html[OpenShift] it is used to monitor the overall infrastructure of OpenShift for operators.
 
 **Alert Manager** is a function  in prometheus that takes in alerts, aggregates them into groups, de-duplicates,  silences, throttles, and then sends out notifications to email, Pagerduty, Slack etc.
 Using this you can define your own alerts on the metrics collected by Prometheus so you can be notified on anything that is important.
 
-**Prometheus Configuration**
-* `global` - the global section in a Prometheus file controls the the servers global configuration.
+*Prometheus Configuration*
+[square]
+*  `global` - the global section in a Prometheus file controls the the servers global configuration.
 * `rule_files` - The rule_files section specifies the location of any rules we want Prometheus server to load.
-* `scrape_configs` -  The scrape_configs controls what Prometheus monitors. It does this by specifing  a set of targets and parameters describing how to scrape them.
+* `scrape_configs` -  The scrape_configs controls what Prometheus monitors. It does this by specifying  a set of targets and parameters describing how to scrape them.
 In the general case, one scrape configuration specifies a single job. Targets may be statically configured via the static_configs parameter or dynamically discovered using one of the supported service-discovery mechanisms.
 
-**Example Configuration**
-```
+*Example Configuration*
+----
 global:
   scrape_interval:     15s
   evaluation_interval: 15s
@@ -28,7 +29,7 @@ scrape_configs:
   - job_name: prometheus
     static_configs:
       - targets: ['localhost:9090']
-```
+----
 
 **Grafana** is an open-source general purpose dashboard and graph composer. Grafana allows you to query visualize, alert on and understand different metrics.
 Grafana supports many sources for metric and it does not mater where the metrics are stored. Users  can create, explore and share dashboards with other people on there team.
@@ -37,61 +38,70 @@ Grafana supports many sources for metric and it does not mater where the metrics
 In the lab below  we will take the inventory service from the coolstore and add metrics to it. We will take those metrics and send them to Prometheus. Prometheus will then forward the metrics to
 grafana where we can visualize and graph the metrics that we create.
 
-### Inventory Thorntail Lab
+== Inventory Thorntail Lab
 Add the following to your pom.xml
-```
+----
  <dependency>
    <groupId>io.thorntail</groupId>
    <artifactId>microprofile</artifactId>
  </dependency>
-```
+----
 
 Import the following to your labs/inventory-thorntail/src/main/java/com/redhat/cloudnative/inventory/InventoryResource.java file to line 7-8
-```
+----
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-```
+----
 
 add the following to line 13
-```
+----
     // tag::metrics-resource-method[]
-```
+----
 
 Add the following to line 33
-```
+----
     // end::metrics-resource-method[]
-```
+----
 
 Add the the following code to lines 20-21
 `@Counted` is used to keep track of how many times this method was invoked
 `@Timed` is used to keep track of how long the invocations took
-```
-@Counted(name = "inventory-availability", absolute = true)
+----
+@Counted(
+      name = "inventory-count",
+      absolute = true,
+      monotonic = true,
+      displayName = "getAvailability",
+      description = "Metrics to show how many times getAvailability method was called.",
+      tags = {"available=true"})
 @Timed(name = "inventory-time", absolute = true)
-```
+----
 
 Delete old build config on OpenShift
-```
+----
 $ oc delete build inventory-s2i
-```
+----
 
 In CodeReady Workspaces, `*right click on 'inventory-thorntail'*` project in the project explorer
 then, `*click on 'Commands > Deploy > fabric8:deploy'*`
 
 image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
 
+*Testing  Prometheus dashboard*
 Verify the metrics endpoint exists
-~~~shell
+----
 $ curl http://{{INVENTORY_ROUTE_HOST}}/metrics
-~~~
+----
 
 Run a load test against the endpoint below.
-```
-siege -c 3 -t 90 -d 3 http://inventory-coolstore1.apps.atlanta-4958.openshiftworkshop.com/api/inventory/329299
-```
+----
+siege -c 3 -t 90 -d 3 http://{{INVENTORY_ROUTE_HOST}}/api/inventory/329299
+----
 
 Navigate to the prometheus dashboard and search for
+----
 http://{{PROMETHEUS_ROUTE_HOST}}/graph
+----
 
 Search for `application:inventory_time_seconds_count`
 Under console note the name of your pod and the information it is giving you.
@@ -99,13 +109,38 @@ Under Graph not you pod name and compare it to others seen on the graph.
 
 Explore different queries using `inventory` as the key word.
 
-Navifate to the Grapfna dashboard
+Navigate to the Grafana dashboard
 http://{{GRAFANA_ROUTE_HOST}}/login
+Login with
+username:
+password:
+
+Navigate to the explore tab
+
+Click on Metrics->application:inventory->application:inventory_time_rate_per_second
+View the displayed graph
+
+Click on Metrics->base:jvm->base:jvm_uptime_seconds
+View the displayed graph
+
+Explore other options under metrics.
+
+.Create  Dashboard in Grafana
+[square]
+* Click on Dashboards
+* Click on add Panel
+image::{% image_path grafana-queries.png %}[Grafana Queries,800,600]
+* Click on Choose Visualization
+* Click on Gauge
+image::{% image_path grafana-explore.png %}[Grafana Explore,600,300]
+* Click on Queries
+* Search for `inventory_count`
+image::{% image_path grafana-inventory-count.png %}[Grafana Inventory Count,800,600]
 
 ---
 ### Vert.x prometheus notes
 add micrometer version to
-```
+----
  <properties>
         <vertx.version>3.6.3.redhat-00009</vertx.version>
         <vertx-maven-plugin.version>1.0.15</vertx-maven-plugin.version>
@@ -115,9 +150,9 @@ add micrometer version to
       <micrometer.version>3.8.0</micrometer.version>
       <micrometer-registry-prometheu.version>1.2.0</micrometer-registry-prometheu.version>
     </properties>
-```
+----
 add to pom dependacy list under gateway vertx
-```
+----
 <dependency>
  <groupId>io.vertx</groupId>
  <artifactId>vertx-micrometer-metrics</artifactId>
@@ -128,27 +163,27 @@ add to pom dependacy list under gateway vertx
  <artifactId>micrometer-registry-prometheus</artifactId>
  <version>${micrometer-registry-prometheu.version}</version>
 </dependency>
-```
+----
 
 add to line 21
 
-```
+----
 import io.vertx.micrometer.backends.BackendRegistries;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
-```
+----
 
 add to line 36
-```
+----
   PrometheusMeterRegistry registry = (PrometheusMeterRegistry) BackendRegistries.getDefaultNow();
-```
+----
 
 add to line 41
-```
+----
 router.route("/metrics").handler(ctx -> {
   String response = registry.scrape();
   ctx.response().end(response);
 });
-```
+----
 run maven build
 
 

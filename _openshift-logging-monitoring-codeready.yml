@@ -20,13 +20,15 @@ vars:
   APPS_HOSTNAME_SUFFIX: APPS_HOSTNAME_SUFFIX
   INVENTORY_ROUTE_HOST: INVENTORY-ROUTE-HOST
   CATALOG_ROUTE_HOST: CATALOG-ROUTE-HOST
+  GRAFANA_ROUTE_HOST: GRAFANA-ROUTE-HOST
+  PROMETHEUS_ROUTE_HOST: PROMETHEUS-ROUTE-HOST
   API_GATEWAY_ROUTE_HOST: API-GATEWAY-ROUTE-HOST
   CODEREADY_WORKSPACES_URL: http://codeready-lab-infra.192.168.99.100.nip.io
   GIT_URL: http://gogs-lab-infra.192.168.99.100.nip.io
   NEXUS_URL: http://nexus.lab-infra.svc:8081/repository/maven-all-public
   KIALI_URL: http://kiali-infra.192.168.99.100.nip.io
   JAEGER_URL: https://jaeger-query-istio-system.192.168.99.100.nip.io
-  
+
 modules:
   activate:
   - introduction
@@ -34,4 +36,5 @@ modules:
   - debug-codeready
   - troubleshooting-applications
   - kibana-dashboard
+  - prometheus-for-app-developers
   - env-info
