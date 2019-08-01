@@ -1,0 +1,12 @@
+= Preparing  your coolstore enviornment 
+
+Lets start by verfiying are cool store is up and running. 
+
+Lets attempt to access the CoolStore application. Via your web browser 
+http://web-<project-id>.{{ COOLSTORE_ROUTE_HOST }}/#/
+
+**to get project ID use with in your codeready workspace terminal 
+___
+oc project 
+___
+
