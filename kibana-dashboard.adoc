@@ -33,7 +33,7 @@ Logstash processing take place in three stages
 
 Sample logstash config
 
----
+----
 
 input {
     file {
@@ -91,12 +91,11 @@ output {
     stdout { codec => rubydebug }
 }
 
----
+----
 
-*More Information*
-
-[Aggregating Container Logs](https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html)
-[Aggregate Logging Sizing Guidelines](https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging_sizing.html)
+*More Information* 
+https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html[Aggregating Container Logs^] 
+https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging_sizing.html[Aggregate Logging Sizing Guidelines^] 
 
 == Exercises
 
@@ -107,12 +106,14 @@ output {
 3. Click on pod name example: gateway-1-wxyz
 4. Click on logs
 5. Click on  View Archive
-![View Archive]({% image_path kibana-view-archive.png %}){:width="900px"}
+
+image:{% image_path kibana-view-archive.png %}[View Archive^,900]
+
 6.  You may have to  relogin to the dashboard  using your OpenShift username and password.
 
 ==== Reviewing  default filter
 
-![Default Filter on login]({% image_path kibana-default-filter-on-login.png %}){:width="900px"}
+image:{% image_path kibana-default-filter-on-login.png %}[Default Filter on login,900]
 
 As seen in the picture above when we click on the view-archive in the above step it filters the result by pod name and the namespace.
 
@@ -138,11 +139,11 @@ optional open make open the coolstore and navigate the site. http://web-coolstor
 
 ==== Filter by namespace log level
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND level:err)
 
 (kubernetes.namespace_name:"coolstore-XX" AND level:info)
----
+----
 
 ==== Save error filter
 
@@ -174,39 +175,38 @@ optional open make open the coolstore and navigate the site. http://web-coolstor
 
 >Below are other filters you can play with.  There are many options that can be used. Under the selected fields you can modify the table that is shown in your dashboard by clicking on a selected field.
 
-![Selected Fields]({% image_path kibana-selected-fields.png %}){:width="75%"}{:height="75%"}
-
+image:{% image_path kibana-selected-fields.png %}[Selected Fields]
 *Experiment with adding and removing selected fields while you are filtering the logs.*
 
 Filter by namespace and POD name
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND kubernetes.pod_name:vertx)
----
+----
 
 Filter by namespace and container name
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND kubernetes.container_name:vertx)
----
+----
 
 Filter by namespace and container name
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:catalog)
----
+----
 
 Filter by namespace and deployment
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND  kubernetes.labels.deploymentconfig:gateway)
----
+----
 
 Chain a query
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:catalog) OR(kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:gateway) OR(kubernetes.namespace_name:"coolstore-XX"  AND kubernetes.labels.app:inventory) OR(kubernetes.namespace_name:"coolstore-XX"  AND kubernetes.labels.app:web)
----
+----
 
 ==== Get status code of Post via vert.x using regex
 
@@ -214,13 +214,13 @@ We will not create a dashboard the collects the status of querying the product a
 
 Filter the gateway using the filter below
 
----
+----
 (kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:gateway  AND message:*status code*)
----
+----
 
 Generate some messages
 
----
+----
 ENDPOINT=http://$(oc get route | grep gateway | awk '{print $2}')
 echo $ENDPOINT/api/products
 for i in {1..100}; do
@@ -228,7 +228,7 @@ for i in {1..100}; do
   echo "\n"
   sleep 5s
 done
----
+----
 
 While script is running continue on to next steps
 
@@ -237,6 +237,7 @@ While script is running continue on to next steps
 1. search using the following query `(kubernetes.namespace_name:"coolstore-XX" AND kubernetes.labels.app:gateway  AND message:*status code*)`
 2. click on Save
 3. Save search name as `Vert.x Status Code`
+image:{% image_path kibana-view-vertx-status-code.png  %}[Vert.x Status Code,900]
 
 ==== Create Visualization Graph
 
@@ -251,10 +252,7 @@ While script is running continue on to next steps
 9. This should display your graph.
 10. click on save
 11. Save Visualization as `Vert.x Status Code`
-
-
-![Vert.x Status Code]({% image_path kibana-status-code-graph.png %}){:width="900px"}
-
+image:{% image_path kibana-graph.png  %}[Vert.x Status Code,900]
 
 ==== Add Vert.x Status Code to Dashboard
 
@@ -265,14 +263,14 @@ While script is running continue on to next steps
 4. Click on the `Vert.x Status Code` under Visualization
 5. click on save
 6. Save dashboard `Main Dashboard`
-
+image:{% image_path kibana-dashboard.png  %}[Vert.x Status Code,900]
 
 The gateway is using the SLF4J library for logging
 You can review calls to the SLF4J function in the `src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java` file
 
----java
+----
 line 78:  LOG.warn("Inventory error for {}: status code {}",
----
+----
 
 [SLF4J user manual](https://www.slf4j.org/manual.html)
 
@@ -300,7 +298,7 @@ Below are example steps of configuring a java application to use fluentd.
 Install the tdagent RPM
 Modify the config file then restart your td-agent service
 
----xml
+----
 <source>
 @type forward
 port 24224
@@ -308,11 +306,11 @@ port 24224
 <match fluentd.test.>
 @type stdout
 </match>
----
+----
 
 Update your pom.xml with the appropriate dependency information
 
----xml
+----
 <dependencies>
 ...
 <dependency>
@@ -322,11 +320,11 @@ Update your pom.xml with the appropriate dependency information
 </dependency>
 ...
 </dependencies>
----
+----
 
 Add the following to your application
 
----java
+----
 import java.util.HashMap;
 import java.util.Map;
 import org.fluentd.logger.FluentLogger;  // Add to your  application
@@ -343,13 +341,13 @@ public class Main {
         // ...
     }
 }
----
+----
 
 Once your app is running logs will report to td-agent.log
 
----
+----
 tail  -f /var/log/td-agent/td-agent.log
----
+----
 
 
 Well done and congratulations for completing all the labs.
