@@ -7,17 +7,16 @@ In this workshop you will learn how to troubleshoot log and monitor applications
 We will go through the following exercises below:
 
 * Introduction to Logging and Monitoring on OpenShift
+* Debugging Cloud Native Applications on  Openshift
 * Troubleshooting Applications on OpenShift
-* Building Sample Application used for Logging and Monitoring 
 * Kibana Dashboard for Developers 
-* Prometheus internals
 * Application monitoring in OpenShift with Prometheus and Grafana 
 * Prometheus and Grafana for OpenShift Operators and SRE's
 
 
 The outcome is you will be able to use tools technologies such as Kibana and Prometheus. To help you troubleshoot issues that you may run into while developing a cloud native application. 
 
-### The importance of Monitoring systems
+=== The importance of Monitoring systems
 While developing applications on OpenShift it is very important to have good monitoring. This is important because we need 
 to know what is really going on with our services that we build. We must know what the service is doing  how how it is behaving. 
 While developing [CI/CD](https://www.redhat.com/en/topics/devops/what-is-ci-cd) pipelines it is important to have monitoring in all states of the process. It is especially 
