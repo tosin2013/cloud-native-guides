@@ -12,8 +12,9 @@ This one day hands-on cloud-native workshops provides developers and introductio
 * Debugging Cloud Native Applications on  OpenShift
 * Troubleshooting Applications on OpenShift
 * Kibana Dashboard for Developers 
+* Prometheus and Grafana for OpenShift Operators and SRE's 
 * Application monitoring in OpenShift with Prometheus and Grafana 
-* Prometheus and Grafana for OpenShift Operators and SRE's
+
 
 == Install Workshop Infrastructure
 

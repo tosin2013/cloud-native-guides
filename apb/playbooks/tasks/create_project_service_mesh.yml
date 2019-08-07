@@ -23,7 +23,11 @@
   shell: "echo {{ lookup('template', '{{ playbook_dir }}/templates/project-limits.yaml.j2')  | quote }} | oc replace -f -"
 - name: Auto deploy coolstore application
   command: "oc new-app https://raw.githubusercontent.com/tosin2013/cloud-native-labs/master/solutions/all/coolstore-template.yaml -n {{ project_name }}"
-  
+- name: create {{ project_name }} project
+  command: >
+      oc new-project {{ project_name }}-metrics
+
+
 # Create and configuration infra project
 - name: check if {{ infra_project_name }} project exists
   command: "oc get project {{ infra_project_name }}"
