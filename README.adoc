@@ -7,7 +7,9 @@ This one day hands-on cloud-native workshops provides developers and introductio
 == Agenda
 
 * Introduction to Logging and Monitoring on OpenShift
-* Debugging Cloud Native Applications on  Openshift
+* Getting Started with OpenShift
+* Preparing your coolstore environment
+* Debugging Cloud Native Applications on  OpenShift
 * Troubleshooting Applications on OpenShift
 * Kibana Dashboard for Developers 
 * Application monitoring in OpenShift with Prometheus and Grafana 

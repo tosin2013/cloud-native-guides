@@ -1,4 +1,4 @@
-== Preparing  your coolstore enviornment 
+== Preparing  your coolstore environment 
 
 ==== Lets start by verfiying are cool store is up and running. 
 
