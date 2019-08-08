@@ -22,7 +22,7 @@
 - name: update limit range
   shell: "echo {{ lookup('template', '{{ playbook_dir }}/templates/project-limits.yaml.j2')  | quote }} | oc replace -f -"
 - name: Auto deploy coolstore application
-  command: "oc process -f https://raw.githubusercontent.com/tosin2013/cloud-native-labs/master/solutions/all/coolstore-template.yaml -n {{ project_name }} | oc create -f "
+  command: "oc process -f {{ playbook_dir }}/templates/coolstore-template.yaml -n {{ project_name }} | oc create -f "
 - name: create {{ project_name }} project
   command: >
       oc new-project {{ project_name }}-metrics
