@@ -19,8 +19,8 @@
     infrasvcs_adm_user: adminuser
     infrasvcs_adm_pwd: adminpwd
     user_count: 5
-    openshift_service_mesh_installation: false
-    preconfigure_service_mesh_projects: false
+    openshift_service_mesh_installation: true
+    preconfigure_service_mesh_projects: true
     preconfigure_coolstore_project: true
     preconfigure_prometheus_project: true
     preconfigure_squash: false
@@ -212,18 +212,9 @@
     when: 
       - preconfigure_service_mesh_projects
 
-  # Preconfigure Projects for Service Mesh usage
-  - name: create projects
-    command: "oc new-project {{ project_name }}"
-    vars:
-      username: "{{ 'user%d' | format(item) }}"
-      project_name: "{{ 'coolstore%d' | format(item) }}"
-      infra_project_name: "{{ 'infra%d' | format(item) }}"
-    loop: "{{ range(1, user_count|int + 1) | list }}"
-
     # Preconfigure Projects for Cool Store Deployment
   - name: deploy coolstore applications onto project 
-    command: "oc process -f {{ playbook_dir }}/tasks/coolstore-template.yaml -n {{ project_name }} | oc create -f -"
+    command: "oc process -f {{ playbook_dir }}/tasks/coolstore-template.yaml  -p APPLICATION_NAME={{ project_name }} -n {{ project_name }} | oc create -f -"
     vars:
       username: "{{ 'user%d' | format(item) }}"
       project_name: "{{ 'coolstore%d' | format(item) }}"
