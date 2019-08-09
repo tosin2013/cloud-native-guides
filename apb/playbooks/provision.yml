@@ -21,6 +21,8 @@
     user_count: 5
     openshift_service_mesh_installation: true
     preconfigure_service_mesh_projects: true
+    preconfigure_coolstore_project: true
+    preconfigure_prometheus_project: true 
     preconfigure_squash: false
 
   roles:
@@ -209,7 +211,29 @@
     loop: "{{ range(1, user_count|int + 1) | list }}"
     when: 
       - preconfigure_service_mesh_projects
-  
+
+    # Preconfigure Projects for Cool Store Deployment
+  - name: deploy coolstore applications onto project 
+    command: "oc process -f {{ playbook_dir }}/tasks/coolstore-template.yaml -n {{ project_name }} | oc create -f -"
+    vars:
+      username: "{{ 'user%d' | format(item) }}"
+      project_name: "{{ 'coolstore%d' | format(item) }}"
+      infra_project_name: "{{ 'infra%d' | format(item) }}"
+    loop: "{{ range(1, user_count|int + 1) | list }}"
+    when: 
+      - preconfigure_coolstore_project
+
+    # Preconfigure Projects for Promethous Deployment
+  - name: deploy Promethous onto project 
+    include: "{{ playbook_dir }}/tasks/deploy-prometheus.yml"
+    vars:
+      username: "{{ 'user%d' | format(item) }}"
+      project_name: "{{ 'coolstore%d' | format(item) }}-metrics"
+      infra_project_name: "{{ 'infra%d' | format(item) }}"
+    loop: "{{ range(1, user_count|int + 1) | list }}"
+    when: 
+      - preconfigure_prometheus_project
+
   # Preconfigure cluster for Squash
   - name: preconfigure cluster for Squash
     command: >

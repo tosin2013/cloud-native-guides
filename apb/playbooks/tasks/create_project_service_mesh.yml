@@ -21,13 +21,7 @@
   command: "oc adm policy add-scc-to-user anyuid -z default -n {{ project_name }}"
 - name: update limit range
   shell: "echo {{ lookup('template', '{{ playbook_dir }}/templates/project-limits.yaml.j2')  | quote }} | oc replace -f -"
-- name: Auto deploy coolstore application
-  command: "oc process -f {{{ lookup('template', '{{ playbook_dir }}/templates/coolstore-template.yaml.j2') -n {{ project_name }} | oc create -f "
-- name: create {{ project_name }} project
-  command: >
-      oc new-project {{ project_name }}-metrics
-
-
+  
 # Create and configuration infra project
 - name: check if {{ infra_project_name }} project exists
   command: "oc get project {{ infra_project_name }}"
