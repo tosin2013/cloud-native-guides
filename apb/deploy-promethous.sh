@@ -126,18 +126,30 @@ while true; do
 done
 oc expose svc/prometheus-operated -n $projectname${i}-monitoring
 
-
-
 ### Confgiure grafana
-oc create -f apb/playbooks/tasks/grafana-claim-persistentvolumeclaim.yaml -n $projectname${i}-monitoring
-oc create -f apb/playbooks/tasks/grafana.yaml -n $projectname${i}-monitoring
-oc create -f apb/playbooks/tasks/grafana-ip-service.yaml -n $projectname${i}-monitoring
+oc create -f playbooks/tasks/grafana-claim-persistentvolumeclaim.yaml -n $projectname${i}-monitoring
+sed -i 's/    namespace:.*/    namespace: "'$projectname${i}'-monitoring"/g' playbooks/tasks/grafana-configmap.yml
+oc create configmap grafana-config --from-file=playbooks/tasks/grafana-configmap.yml -n $projectname${i}-monitoring
+oc create -f playbooks/tasks/grafana.yaml -n $projectname${i}-monitoring
+cat >grafana-ip-service.yaml<<YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-ip-service
+  namespace: $projectname${i}-monitoring
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path:   /metrics
+      prometheus.io/port:   '3000'
+spec:
+  type: ClusterIP
+  selector:
+    component: grafana
+  ports:
+  - port: 3000
+    targetPort: 3000
+YAML
+
+oc create -f grafana-ip-service.yaml -n $projectname${i}-monitoring
 oc expose service/grafana-ip-service -n $projectname${i}-monitoring
-
-```
-done
-
-for (( i = $begin; i <= $count; i++ )); do
-  oc login "$hostname" --insecure-skip-tls-verify -u "$username${i}" -p "$password"
-  oc process -f playbooks/tasks/coolstore-template.yaml  -e APPLICATION_NAME=$projectname${i}-monitoring -n $projectname${i} | oc create -f -
 done
