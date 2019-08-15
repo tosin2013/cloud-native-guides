@@ -111,10 +111,16 @@ Explore different queries using `inventory` as the key word.
 
 Navigate to the Grafana dashboard
 http://{{GRAFANA_ROUTE_HOST}}/login
-Login with
-username:
-password:
+Login with  
+username: admin  
+password: admin
 
+Change the password to `openshift`
+Click on Add source select `Prometheus`
+add URL http://prometheus-operated.coolstoreXX-monitoring.svc.cluster.local 
+image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
+
+click on `Save & Test`
 Navigate to the explore tab
 
 Click on Metrics->application:inventory->application:inventory_time_rate_per_second
