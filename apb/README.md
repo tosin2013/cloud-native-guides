@@ -1,7 +1,7 @@
 Cloud-Native Workshop Installer
 =========
 
-The provided Ansible Playbook Bundle automates preparing an OpenShift cluster for the Cloud-Native Labs 
+The provided Ansible Playbook Bundle automates preparing an OpenShift cluster for the Cloud-Native Labs
 by deploying required services (lab instructions, Gogs, Nexus, etc) which are used during the labs.
 
 ## Use an installed APB on OpenShift
@@ -11,7 +11,7 @@ Select the item from the catalog.
 When you develop the APB you can test on a platform in the following ways.
 
 ### Install the apb tool
-The new `apb` tool will help you develop your APB in an easy way. Download the latest apb tool 
+The new `apb` tool will help you develop your APB in an easy way. Download the latest apb tool
 from here: [https://github.com/automationbroker/apb/releases](https://github.com/automationbroker/apb/releases)
 
 The [README.md](https://github.com/automationbroker/apb/blob/master/README.md) in that repository will give you a short getting started very insightful.
@@ -92,6 +92,33 @@ apb bundle deprovision cloud-native-workshop-apb -n cloudnativeguides --follow
 ```
 
 The deprovision command will prompt you for the specific instance to delete and all required parameters to your APB.
+
+## After deployment Steps
+* We will work on integrating these steps in to the Ansible playbook bundle
+1. edit variable in the deploy-coolstore.sh
+```
+hostname=
+password=openshift
+username=user
+begin=1
+count=1
+pause=5
+projectname=coolstore
+```
+2. run the deploy-coolstore.sh script
+3. edit the variables in the deploy-prometheus.sh script
+```
+
+hostname=
+password=openshift
+username=user
+begin=1
+count=1
+pause=5
+projectname=coolstore
+```
+4. The apb should have already created the coolstoreX-montioring projects
+5. run the  deploy-prometheus.sh script
 
 ## Advanced options
 
