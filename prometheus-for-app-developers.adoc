@@ -117,7 +117,7 @@ password: admin
 
 Change the password to `openshift`
 Click on Add source select `Prometheus`
-add URL http://prometheus-operated.coolstoreXX-monitoring.svc.cluster.local 
+add URL http://prometheus-operated-coolstore1-monitoring.apps.atlanta-cf9a.openshiftworkshop.com/graph
 image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
 
 click on `Save & Test`

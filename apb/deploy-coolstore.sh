@@ -18,5 +18,6 @@ projectname=coolstore
 
 for (( i = $begin; i <= $count; i++ )); do
   oc login "$hostname" --insecure-skip-tls-verify -u "$username${i}" -p "$password"
+  oc project $projectname${i}
   oc process -f playbooks/tasks/coolstore-template.yaml -n $projectname${i} | oc create -f -
 done
