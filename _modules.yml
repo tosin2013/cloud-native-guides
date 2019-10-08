@@ -25,7 +25,7 @@ modules:
   webui-deployment:
     name: Deploy Web UI as a Microservice with with Node.js and AngularJS
   health:
-    name: Monitoring Application Health
+    name: Monitoring Application Health 
   fault-tolerance-codeready:
     name: Service Resilience and Fault Tolerance
   app-config-thorntail:
