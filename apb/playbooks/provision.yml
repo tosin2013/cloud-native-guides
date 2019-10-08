@@ -167,7 +167,7 @@
       - name: deploy istio operator
         command: >
           oc apply -n istio-operator 
-          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.10/deploy/servicemesh-operator.yaml
+          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-1.0.0/deploy/servicemesh-operator.yaml
       - name: create istio-system project
         command: "oc new-project istio-system"
       - name: delete project quota
@@ -176,7 +176,7 @@
       - name: deploy istio
         command: >
           oc create -n istio-system 
-          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.10/deploy/examples/istio_v1alpha3_controlplane_cr_basic.yaml
+          -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-1.0.0/deploy/examples/istio_v1alpha3_controlplane_cr_basic.yaml
     when: 
       - istio_system_project_result is failed
       - openshift_service_mesh_installation or preconfigure_service_mesh_projects
