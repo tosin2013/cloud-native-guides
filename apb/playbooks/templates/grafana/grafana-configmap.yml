@@ -2,7 +2,7 @@
   kind: ConfigMap
   metadata:
     name: grafana-config
-    namespace: "monitoring"
+    namespace: "infra3"
   data:
     grafana.ini: |
       ##################### Grafana Configuration Example #####################

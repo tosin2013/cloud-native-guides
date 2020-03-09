@@ -11,16 +11,21 @@ This one day hands-on cloud-native workshops provides developers and introductio
 * Preparing your coolstore environment
 * Debugging Cloud Native Applications on  OpenShift
 * Troubleshooting Applications on OpenShift
-* Kibana Dashboard for Developers 
-* Prometheus and Grafana for OpenShift Operators and SRE's 
-* Application monitoring in OpenShift with Prometheus and Grafana 
+* Kibana Dashboard for Developers
+* Prometheus and Grafana for OpenShift Operators and SRE's
+* Application monitoring in OpenShift with Prometheus and Grafana
 
-
+== Prerequisites
+=== Install Ansible
+```
+subscription-manager repos --enable rhel-7-server-ansible-2.6-rpms
+yum install -y ansible
+```
 == Install Workshop Infrastructure
 
-An https://hub.docker.com/r/openshiftapb/cloudnative-workshop-apb[APB^] is provided for 
-deploying the Cloud-Native Workshop infra (lab instructions, Nexus, Gogs, CodeReady Workspaces, etc) in a project 
-on an OpenShift cluster via the service catalog. In order to add this APB to the OpenShift service catalog, log in 
+An https://hub.docker.com/r/openshiftapb/cloudnative-workshop-apb[APB^] is provided for
+deploying the Cloud-Native Workshop infra (lab instructions, Nexus, Gogs, CodeReady Workspaces, etc) in a project
+on an OpenShift cluster via the service catalog. In order to add this APB to the OpenShift service catalog, log in
 as cluster admin and perform the following in the `*openshift-ansible-service-broker*` project :
 
 1. Edit the `*broker-config*` configmap and add this snippet right after `*registry*`:
@@ -36,7 +41,7 @@ as cluster admin and perform the following in the `*openshift-ansible-service-br
 
 2. Redeploy the `*asb*` deployment
 
-You can https://docs.openshift.com/container-platform/3.11/install_config/oab_broker_configuration.html#oab-config-registry-dockerhub[read more in the docs^] 
+You can https://docs.openshift.com/container-platform/3.11/install_config/oab_broker_configuration.html#oab-config-registry-dockerhub[read more in the docs^]
 on how to configure the service catalog.
 
 TIP: If you are using the _OpenShift Workshop_ in RHPDS, this APB is already available in your service catalog.
@@ -59,12 +64,15 @@ Or if you have Ansible installed locally, you can also run the Ansilbe playbooks
 ----
 oc login
 oc new-project lab-infra
-
+cd apb
+ansible-galaxy install ansible.kubernetes-modules
+ansible-galaxy install ansibleplaybookbundle.asb-modules
+ansible-galaxy install -r requirements.yml
 ansible-playbook -vvv playbooks/provision.yml \
        -e namespace=$(oc project -q) \
        -e openshift_token=$(oc whoami -t) \
        -e openshift_master_url=$(oc whoami --show-server)
----- 
+----
 
 == Lab Instructions on OpenShift
 

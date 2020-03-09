@@ -6,24 +6,35 @@ fi
 
 PROJECT=$1
 
-oc project coolstore1
-oc delete all,configmap,pvc,serviceaccount,rolebinding  --selector app=catalog -n coolstore1
-sleep 3s
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=gateway -n coolstore1
-sleep 3s
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=inventory -n coolstore1
-sleep 3s
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=jenkins-ephemeral -n coolstore1
-sleep 3s
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=web -n coolstore1
-sleep 3s
-oc delete secret catalog -n coolstore1
-oc delete secret inventory -n coolstore1
-oc project ${PROJECT} -n coolstore1
-oc project coolstore1-monitoring
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=grafana -n coolstore1-monitoring
-sleep 3s
-oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector k8s-app=prometheus-operator -n coolstore1-monitoring
+for i in {1..5}
+do
+  echo  "oc project coolstore${i}"
+  oc project coolstore${i}
+  oc delete all,configmap,pvc,serviceaccount,rolebinding  --selector app=catalog -n coolstore${i}
+  sleep 3s
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=gateway -n coolstore${i}
+  sleep 3s
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=inventory -n coolstore${i}
+  sleep 3s
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=jenkins-ephemeral -n coolstore${i}
+  sleep 3s
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=web -n coolstore${i}
+  sleep 3s
+  oc delete secret catalog -n coolstore${i}
+  oc delete secret inventory -n coolstore${i}
+  oc delete project coolstore${i}
+  sleep 3s
+  echo  "oc project infra${i}"
+  oc  project infra${i}
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector app=guides-codeready -n infra${i}
+  oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector k8s-app=prometheus-operator -n infra${i}
+  oc delete project infra${i}
+done
+
+ansible-playbook -vvv playbooks/deprovision.yml        -e namespace=$(oc project -q)        -e openshift_token=$(oc whoami -t)        -e openshift_master_url=$(oc whoami --show-server)
+
+
+/*
 sleep 3s
 oc delete project coolstore1-monitoring
 oc delete all,configmap,pvc,serviceaccount,rolebinding  --selector app=codeready -n ${PROJECT}
@@ -65,4 +76,4 @@ oc project  istio-operator
 oc delete  all,configmap,pvc,serviceaccount,rolebinding  --selector name=istio-operator -n istio-operator
 sleep 60s
 oc delete project  istio-operator
-oc delete project ${PROJECT}
+*/
