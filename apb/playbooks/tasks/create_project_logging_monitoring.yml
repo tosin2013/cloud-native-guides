@@ -52,7 +52,7 @@
         -n {{ infra_project_name }}
   vars:
     workshopper_content_url_prefix: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/{{ git_repository_guide_context }}"
-    workshopper_workshop_urls: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/{{ git_repository_guide_context }}/_openshift-logging-monitoring.yml
+    workshopper_workshop_urls: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/{{ git_repository_guide_context }}/_openshift-logging-monitoring.yml"
   tags: guides
 - name: Expose Route
   command: >
