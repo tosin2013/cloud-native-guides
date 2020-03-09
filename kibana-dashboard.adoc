@@ -1,4 +1,4 @@
-== Navigating the Kibana Dashboard
+== Kibana Dashboard for Developers 
 
 Before we dive into using the Kibana dashboard. We must first review what is the ELK stack.
 

@@ -32,16 +32,15 @@ vars:
 
 modules:
   activate:
-  - getting-started
-  - wildfly-swarm
-  - spring-boot
-  - vertx
-  - nodejs
-  - health
-  - fault-tolerance
-  - app-config
-  - continuous-delivery
-  - debug
-  - troubleshooting-applications
+  - introduction
+  - introduction-to-monitoring-on-openshift
+  - getting-started-codeready
+  - prepare-coolstore-env
+  - debug-codeready
   - kibana-dashboard
+  - application-monitoring-in-openshift-with-prometheus-and-grafana
+  - creating-a-dashboard-with-custom-graphs
+  - prometheus-alert-manager
+  - exporters
+  - how-to-do-upgrades
   - env-info

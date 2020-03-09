@@ -1,4 +1,4 @@
-## Debugging Applications
+## Debugging Cloud Native Applications on OpenShift
 
 *20 MINUTE EXERCISE*
 

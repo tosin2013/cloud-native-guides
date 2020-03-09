@@ -63,10 +63,7 @@ spec:
     port: 8080
 EOF
 
-
-
 oc adm policy add-role-to-user view system:serviceaccount:${infraprojectname}:prometheus-k8s -n ${projectname}
-
 
 cat <<EOF |  oc create -f -
 apiVersion: monitoring.coreos.com/v1
@@ -104,10 +101,10 @@ done
 oc expose svc/prometheus-operated -n ${infraprojectname}
 
 ### Confgiure grafana
-oc create -f grafana/grafana-claim-persistentvolumeclaim.yaml -n ${infraprojectname}
-sed -i 's/    namespace:.*/    namespace: "'${infraprojectname}'"/g' grafana/grafana-configmap.yml
-oc create configmap grafana-config --from-file=grafana/grafana-configmap.yml -n ${infraprojectname}
-oc create -f grafana/grafana.yaml -n ${infraprojectname}
+oc create -f /openshift-logging-monitoring-guid/apb/playbooks/grafana/grafana-claim-persistentvolumeclaim.yaml -n ${infraprojectname}
+sed -i 's/    namespace:.*/    namespace: "'${infraprojectname}'"/g' /openshift-logging-monitoring-guid/apb/playbooks/grafana/grafana-configmap.yml
+oc create configmap grafana-config --from-file=/openshift-logging-monitoring-guid/apb/playbooks/grafana/grafana-configmap.yml -n ${infraprojectname}
+oc create -f /openshift-logging-monitoring-guid/apb/playbooks/grafana/grafana.yaml -n ${infraprojectname}
 cat <<EOF |  oc create -f -
 apiVersion: v1
 kind: Service

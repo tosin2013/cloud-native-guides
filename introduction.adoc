@@ -6,16 +6,15 @@ In this workshop you will learn how to troubleshoot log and monitor applications
 
 We will go through the following exercises below:
 
-* Introduction to Logging and Monitoring on OpenShift
-* Getting Started with OpenShift
+* Introduction to Monitoring on OpenShift
 * Preparing your coolstore environment
-* Debugging Cloud Native Applications on  OpenShift
-* Troubleshooting Applications on OpenShift
+* Debugging Cloud Native Applications on OpenShift
 * Kibana Dashboard for Developers 
-* Prometheus and Grafana for OpenShift Operators and SRE's
-* Application monitoring in OpenShift with Prometheus and Grafana 
-
-
+* Application monitoring in OpenShift with Prometheus and Grafana
+* Creating a Dashboard with custom graphs
+* Prometheus Alert Manager
+* Exporters
+* How to do Upgrades
 
 The outcome is you will be able to use tools technologies such as Kibana and Prometheus. To help you troubleshoot issues that you may run into while developing a cloud native application. 
 

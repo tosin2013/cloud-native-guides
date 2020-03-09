@@ -17,5 +17,5 @@ oc new-project $PROJECT && oc project $PROJECT
 #apb bundle provision cloud-native-workshop-apb -n $PROJECT --follow
 
 
-ansible-playbook -vvv playbooks/provision.yml        -e namespace=$(oc project -q)        -e openshift_token=$(oc whoami -t)        -e openshift_master_url=$(oc whoami --show-server) \
-  --start-at-task="preconfigure projects for logging and monitoring"
+#ansible-playbook -vvv playbooks/provision.yml        -e namespace=$(oc project -q)        -e openshift_token=$(oc whoami -t)        -e openshift_master_url=$(oc whoami --show-server) \
+#  --start-at-task="preconfigure projects for logging and monitoring"

@@ -33,10 +33,14 @@ vars:
 modules:
   activate:
   - introduction
+  - introduction-to-monitoring-on-openshift
   - getting-started-codeready
   - prepare-coolstore-env
   - debug-codeready
-  - troubleshooting-applications
   - kibana-dashboard
-  - prometheus-for-app-developers
+  - application-monitoring-in-openshift-with-prometheus-and-grafana
+  - creating-a-dashboard-with-custom-graphs
+  - prometheus-alert-manager
+  - exporters
+  - how-to-do-upgrades
   - env-info
