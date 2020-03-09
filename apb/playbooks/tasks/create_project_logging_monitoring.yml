@@ -39,7 +39,7 @@
       oc new-project {{ infra_project_name }}
 - name: grant {{ username }} to edit the project {{ infra_project_name }}
   command: "oc adm policy add-role-to-user edit {{ username }} -n {{ infra_project_name }}"
-- name: deploy coolstore applications onto project
+- name: deploy promethous and grafana 
   shell: "{{ playbook_dir }}/templates/deploy-promethous.sh  {{ project_name }} {{ infra_project_name }}"
   ignore_errors: true
 
