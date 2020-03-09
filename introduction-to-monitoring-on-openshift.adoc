@@ -1,1 +1,40 @@
 == Introduction to Monitoring on OpenShift
+
+=== Logging
+.OpenShift offers logging which aggregates logs for OpenShift platform services, Nodes, Containers and applications. The logging stack consists of the following components.
+* *Elastic Search* - A NoSQL Database with multitenant full-text search and analytics engine. 
+* *FluentD* - A data collector that gathers logs from nodes and feeds them  the Elastic Search database.
+* *Kibana* - An analytics and visualization web UI for Elastic Search. This tool will allow you to create visualizations to be used in dashboards.
+* *Curator* - This allows administrators to configure scheduled maintenance operations for the Elastic Search Database. 
+* *Event Router* - This watches events in Openshift formats into JSON and Outputs the events into STDOUT to be injested by FliuentD. 
+
+=== Cluster Events
+Cluster Administrators are encouraged to familiarize themselves with the Event resource type and review a list of events to determine which events are of interest. Events are associated with a namespace or project. The default namespace for example will hold events for monitoring or auditing a cluster.
+
+NOTE:  oc events command is used to list different events in your cluster or namespace. 
+```
+$ oc get events -n default
+
+$ oc get events -n coolstore1
+```
+
+=== OpenShift 4.x Cluster Logging Components
+.There are currently 5 different types of cluster logging components:
+* *logStore* - This is where the logs will be stored. The current implementation is Elasticsearch.
+* *collection* - This is the component that collects logs from the node, formats them, and stores them in the logStore. The current implementation is Fluentd.
+* *visualization* - This is the UI component used to view logs, graphs, charts, and so forth. The current implementation is Kibana.
+* *curation* - This is the component that trims logs by age. The current implementation is Curator.
+* *event routing* - This is the component forwards events to cluster logging. The current implementation is Event Router.  
+
+link:https://docs.openshift.com/container-platform/4.3/logging/cluster-logging.html[Understanding cluster logging and OpenShift Container Platform]
+
+=== OpenShift 3.11 Cluster Logging 
+.Service Logs- OpenShift 3.11 produces logs for services that run in static pods in a cluster. 
+* API (uses *master-logs api api*)
+* Controllers (uses *master-logs controllers controllers*)
+* etcd (uses *master-logs etcd etcd*)
+* atomic-openshift-node (uses *journalctl -u atomic-openshift-node.service*)
+
+When the Master Api Audit Log is enabled API requests by users, administrators, or system components are logged. This can be found by searching for *AUDIT*.
+
+link:https://docs.openshift.com/container-platform/3.11/security/monitoring.html[Monitoring Cluster Events and Logs]
