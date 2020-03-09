@@ -93,6 +93,33 @@ apb bundle deprovision cloud-native-workshop-apb -n cloudnativeguides --follow
 
 The deprovision command will prompt you for the specific instance to delete and all required parameters to your APB.
 
+## After deployment Steps
+* We will work on integrating these steps in to the Ansible playbook bundle
+1. edit variable in the deploy-coolstore.sh
+```
+hostname=
+password=openshift
+username=user
+begin=1
+count=1
+pause=5
+projectname=coolstore
+```
+2. run the deploy-coolstore.sh script
+3. edit the variables in the deploy-prometheus.sh script
+```
+
+hostname=
+password=openshift
+username=user
+begin=1
+count=1
+pause=5
+projectname=coolstore
+```
+4. The apb should have already created the coolstoreX-montioring projects
+5. run the  deploy-prometheus.sh script
+
 ## Advanced options
 
 |Variable                   | Default Value            | Description   |

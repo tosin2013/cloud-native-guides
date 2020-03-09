@@ -1,0 +1,13 @@
+---
+# Create and configuration application project
+- name: check if {{ project_name }} project exists
+  command: "oc get project {{ project_name }}"
+  register: project_result
+  ignore_errors: true
+- name: delete {{ project_name }} project
+  command: >
+      oc delete project {{ project_name }}
+  when: project_result is succeeded
+- name: create {{ project_name }} project
+  command: >
+      oc new-project {{ project_name }}
