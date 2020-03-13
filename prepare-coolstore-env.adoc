@@ -17,6 +17,16 @@ chmod +x configure-cool-store-code.sh
 ./configure-cool-store-code.sh
 ----
 
+Show Pod status 
+---
+oc get pods
+---
+
+Show Build Status 
+---
+oc get bc
+---
+
 Delete the older spring boot build in the project
 ----
 $ oc delete bc/catalog-s2i
