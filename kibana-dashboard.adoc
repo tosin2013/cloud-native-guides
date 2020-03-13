@@ -93,9 +93,9 @@ output {
 
 ----
 
-*More Information* 
-https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html[Aggregating Container Logs^] 
-https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging_sizing.html[Aggregate Logging Sizing Guidelines^] 
+*More Information*   
+https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html[Aggregating Container Logs^]  
+https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging_sizing.html[Aggregate Logging Sizing Guidelines^]  
 
 == Exercises
 
@@ -135,7 +135,7 @@ Lets turn on Auto-refresh
 2. Click on `Auto-refresh`.
 3. Change Refresh interval to  `10 seconds`.
 4. Review the 30 minutes of log data. Notice how the number of hits change when there is activeity on the system.
-optional open make open the coolstore and navigate the site. http://web-coolstore-1.apps.atlanta-2c4e.openshiftworkshop.com/
+optional open make open the coolstore and navigate the site. {{ COOLSTORE_ROUTE_HOST }}
 
 ==== Filter by namespace log level
 
