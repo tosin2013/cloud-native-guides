@@ -72,7 +72,7 @@
         WEB_NODEJS_GIT_REPO=https://github.com/{{ git_repository_lab_path }}/tree/{{ git_repository_lab_reference }}/web-nodejs
         CATALOG_GO_GIT_REPO=https://github.com/{{ git_repository_lab_path }}/tree/{{ git_repository_lab_reference }}/catalog-go
         CODEREADY_WORKSPACES_URL="http://codeready-{{ namespace }}.apps.{{ apps_hostname_suffix }}"
-        COOLSTORE_ROUTE_HOST="http://web-{{ namespace }}.apps.{{ apps_hostname_suffix }}"
+        COOLSTORE_ROUTE_HOST="http://web-{{ project_name }}.apps.{{ apps_hostname_suffix }}"
         GIT_URL=http://gogs-{{ namespace }}.apps.{{ apps_hostname_suffix }}
         NEXUS_URL=http://nexus-{{ namespace }}.apps.{{ apps_hostname_suffix }}
         KIBANA_URL=https://kibana.apps.{{ apps_hostname_suffix }}
