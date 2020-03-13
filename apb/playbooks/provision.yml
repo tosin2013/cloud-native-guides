@@ -8,7 +8,7 @@
     openshift_token:
     openshift_master_url:
     openshift_user_password: openshift
-    git_repository_lab_path: tosin2013/cloud-native-guides
+    git_repository_lab_path: tosin2013/cloud-native-labs
     git_repository_lab_reference: ocp-3.11
     git_repository_guide_path: tosin2013/cloud-native-guides
     git_repository_guide_reference: ocp-3.11
@@ -18,7 +18,7 @@
     gogs_pwd: openshift
     infrasvcs_adm_user: adminuser
     infrasvcs_adm_pwd: adminpwd
-    user_count: 2
+    user_count: 1
     openshift_service_mesh_installation: false
     preconfigure_service_mesh_projects: false
     preconfigure_coolstore_project: true

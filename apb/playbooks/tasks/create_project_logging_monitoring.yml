@@ -76,6 +76,6 @@
         GIT_URL=http://gogs-{{ namespace }}.apps.{{ apps_hostname_suffix }}
         NEXUS_URL=http://nexus-{{ namespace }}.apps.{{ apps_hostname_suffix }}
         KIBANA_URL=https://kibana.apps.{{ apps_hostname_suffix }}
-        GRAFANA_URL="http://grafana-ip-service-{{ infra_project_name }}.apps.{{ apps_hostname_suffix }}"
-        PROMETHEUS_URL="http://prometheus-operated-{{ infra_project_name }}.apps.{{ apps_hostname_suffix }}/graph"
+        GRAFANA_ROUTE_HOST="http://grafana-ip-service-{{ infra_project_name }}.apps.{{ apps_hostname_suffix }}"
+        PROMETHEUS_ROUTE_HOST="http://prometheus-operated-{{ infra_project_name }}.apps.{{ apps_hostname_suffix }}/graph"
   tags: guides

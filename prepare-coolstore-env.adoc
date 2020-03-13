@@ -4,7 +4,7 @@
 
 Lets attempt to access the CoolStore application. Via your web browser
 ----
-http://web-<project-id>.{{ COOLSTORE_ROUTE_HOST }}/#/
+{{ COOLSTORE_ROUTE_HOST  }}
 ----
 
 [TIP]
