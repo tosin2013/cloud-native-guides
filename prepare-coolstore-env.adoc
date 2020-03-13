@@ -2,18 +2,14 @@
 
 ==== Lets start by verfiying are cool store is up and running. 
 
-Lets attempt to access the CoolStore application. Via your web browser
-----
-{{ COOLSTORE_ROUTE_HOST  }}
-----
+In the CodeReady Terminal 
 
-[TIP]
-====
-To get <project-id> use with in your codeready workspace terminal
+Switch to {{COOLSTORE_PROJECT}} Project
 ----
-oc project 
+$ oc project {{COOLSTORE_PROJECT}}
 ----
 ====
+
 
 Lets run the following script to update the codebase in this project.
 ----
@@ -29,6 +25,7 @@ $ oc delete bc/catalog-s2i
 buildconfig.build.openshift.io "catalog-s2i" deleted
 ----
 
+Click on the catalog-spring-boot
 We will now build the catalog spring boot project
 image:{% image_path prepare-build.png %}[CodeReady Build, 400]
 
@@ -46,6 +43,7 @@ $ oc delete bc/inventory-s2i
 buildconfig.build.openshift.io "inventory-s2i" deleted
 ----
 
+Click on the inventory-thorntail
 We will now build the inventory thorntail project
 image:{% image_path prepare-build.png %}[CodeReady Build, 400]
 
@@ -71,6 +69,16 @@ image:{% image_path prepare-fabric8.png %}[CodeReady  Fabric8, 400]
 Lets attempt to access the inventory API. Via your web browser
 ----
 http://{{ API_GATEWAY_ROUTE_HOST }}
+----
+
+Lets attempt to access the inventory API. Via your web browser
+----
+http://{{ API_GATEWAY_ROUTE_HOST }}
+----
+
+Lets attempt to access the CoolStore application. Via your web browser
+----
+{{ COOLSTORE_ROUTE_HOST  }}
 ----
 
 Well done! You are ready for the next lab.
