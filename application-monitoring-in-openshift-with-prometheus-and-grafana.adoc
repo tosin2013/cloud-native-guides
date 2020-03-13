@@ -114,16 +114,17 @@ Under Graph not you pod name and compare it to others seen on the graph.
 
 Explore different queries using `inventory` as the key word.
 
-*Navigate to the Grafana dashboard*  
+*Navigate to the Grafana dashboard* +
 {{GRAFANA_ROUTE_HOST}}  
-Login with   
-username: admin  
-password: admin  
 
-*Change the password to `openshift`*
-Click on Add source select `Prometheus`
-add URL {{PROMETHEUS_ROUTE_HOST}}
-image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
+.Login with   
+* username: admin  
+* password: admin  
+
+.Change the password to `openshift`
+* Click on Add source select `Prometheus`
+* add URL {{PROMETHEUS_ROUTE_HOST}}
+* image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
 
 click on `Save & Test`
 Navigate to the explore tab
@@ -139,7 +140,7 @@ Explore other options under metrics.
 .Create  Dashboard in Grafana
 [square]
 * Click on Dashboards
-* Click on add Panel
+* Click on add Panel 
 
 image::{% image_path grafana-queries.png %}[Grafana Queries,800,600]
 
