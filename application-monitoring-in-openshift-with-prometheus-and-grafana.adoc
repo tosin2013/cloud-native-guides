@@ -93,12 +93,12 @@ Verify the metrics endpoint exists
 $ curl http://{{INVENTORY_ROUTE_HOST}}/metrics
 ----
 
-Run a load test against the endpoint below.
+*Run a load test against the endpoint below.*
 ----
 siege -c 3 -t 90 -d 3 http://{{INVENTORY_ROUTE_HOST}}/api/inventory/329299
 ----
 
-Navigate to the prometheus dashboard and search for
+*Navigate to the prometheus dashboard and search for*
 ----
 http://{{PROMETHEUS_ROUTE_HOST}}/graph
 ----
@@ -109,13 +109,13 @@ Under Graph not you pod name and compare it to others seen on the graph.
 
 Explore different queries using `inventory` as the key word.
 
-Navigate to the Grafana dashboard
+*Navigate to the Grafana dashboard*
 http://{{GRAFANA_ROUTE_HOST}}/login
 Login with  
 username: admin  
 password: admin
 
-Change the password to `openshift`
+*Change the password to `openshift`*
 Click on Add source select `Prometheus`
 add URL http://{{PROMETHEUS_ROUTE_HOST}}/graph
 image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
@@ -135,10 +135,15 @@ Explore other options under metrics.
 [square]
 * Click on Dashboards
 * Click on add Panel
+
 image::{% image_path grafana-queries.png %}[Grafana Queries,800,600]
+
 * Click on Choose Visualization
 * Click on Gauge
+
 image::{% image_path grafana-explore.png %}[Grafana Explore,600,300]
+
 * Click on Queries
 * Search for `inventory_count`
+
 image::{% image_path grafana-inventory-count.png %}[Grafana Inventory Count,800,600]

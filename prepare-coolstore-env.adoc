@@ -11,7 +11,7 @@ $ oc project {{COOLSTORE_PROJECT}}
 
 Lets run the following script to update the codebase in this project.
 ----
-cd /project
+cd /projects
 curl -OL https://gist.githubusercontent.com/tosin2013/94c573ef4763b91ce53ec23649339a50/raw/7a26ffcb2b50f9df83a4c90fc3f4c5db9dd11747/configure-cool-store-code.sh
 chmod +x configure-cool-store-code.sh
 ./configure-cool-store-code.sh
