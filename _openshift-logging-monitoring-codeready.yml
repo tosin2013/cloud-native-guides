@@ -39,7 +39,6 @@ modules:
   - debug-codeready
   - kibana-dashboard
   - application-monitoring-in-openshift-with-prometheus-and-grafana
-  - creating-a-dashboard-with-custom-graphs
   - prometheus-alert-manager
   - exporters
   - how-to-do-upgrades

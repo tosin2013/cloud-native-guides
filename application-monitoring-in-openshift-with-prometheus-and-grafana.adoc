@@ -87,7 +87,7 @@ then, `*click on 'Commands > Deploy > fabric8:deploy'*`
 
 image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
 
-*Testing  Prometheus dashboard*
+*Testing  Prometheus dashboard*  
 Verify the metrics endpoint exists
 ----
 $ curl http://{{INVENTORY_ROUTE_HOST}}/metrics
