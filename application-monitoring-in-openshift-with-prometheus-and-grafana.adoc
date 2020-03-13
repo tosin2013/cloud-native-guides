@@ -88,19 +88,24 @@ then, `*click on 'Commands > Deploy > fabric8:deploy'*`
 image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
 
 *Testing  Prometheus dashboard*  
-Verify the metrics endpoint exists
-----
-$ curl http://{{INVENTORY_ROUTE_HOST}}/metrics
+Get inventory endpoint  
+---
+INVENTORY_ROUTE_HOST=$(oc get routes | grep inventory  | awk '{print $2}')
+---
+
+Verify the metrics endpoint exists  
+---- 
+$ curl http://${INVENTORY_ROUTE_HOST}/metrics
 ----
 
 *Run a load test against the endpoint below.*
 ----
-siege -c 3 -t 90 -d 3 http://{{INVENTORY_ROUTE_HOST}}/api/inventory/329299
+siege -c 3 -t 90 -d 3 http://${INVENTORY_ROUTE_HOST}/api/inventory/329299
 ----
 
 *Navigate to the prometheus dashboard and search for*
 ----
-http://{{PROMETHEUS_ROUTE_HOST}}/graph
+{{PROMETHEUS_ROUTE_HOST}}
 ----
 
 Search for `application:inventory_time_seconds_count`
@@ -109,15 +114,15 @@ Under Graph not you pod name and compare it to others seen on the graph.
 
 Explore different queries using `inventory` as the key word.
 
-*Navigate to the Grafana dashboard*
-http://{{GRAFANA_ROUTE_HOST}}/login
-Login with  
+*Navigate to the Grafana dashboard*  
+{{GRAFANA_ROUTE_HOST}}  
+Login with   
 username: admin  
-password: admin
+password: admin  
 
 *Change the password to `openshift`*
 Click on Add source select `Prometheus`
-add URL http://{{PROMETHEUS_ROUTE_HOST}}/graph
+add URL {{PROMETHEUS_ROUTE_HOST}}
 image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
 
 click on `Save & Test`
