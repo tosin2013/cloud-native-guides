@@ -42,7 +42,9 @@ image:{% image_path prepare-fabric8.png %}[CodeReady  Fabric8, 400]
 
 Lets attempt to access the catalog API. Via your web browser
 ----
-http://{{ CATALOG_ROUTE_HOST }}
+CATALOG_ROUTE_HOST=$(oc get routes | grep catalog  | awk '{print $2}')
+echo "COPY  LINK TO BROWSER: http://${CATALOG_ROUTE_HOST}" 
+echo "Run curl command: curl http://${CATALOG_ROUTE_HOST}/api/catalog"
 ----
 
 Delete the older inventory thorntail build in the project
@@ -60,8 +62,11 @@ image:{% image_path prepare-fabric8.png %}[CodeReady  Fabric8, 400]
 
 Lets attempt to access the inventory API. Via your web browser
 ----
-http://{{ INVENTORY_ROUTE_HOST }}
+INVENTORY_ROUTE_HOST=$(oc get routes | grep inventory  | awk '{print $2}')
+echo "COPY  LINK TO BROWSER: http://${INVENTORY_ROUTE_HOST}" 
+echo "Run curl command: curl http://${CATALOG_INVENTORY_ROUTE_HOSTOUTE_HOST}/api/inventory/329299"
 ----
+
 
 Delete the older gateway-vertx build in the project
 ----
@@ -76,12 +81,9 @@ image:{% image_path prepare-fabric8.png %}[CodeReady  Fabric8, 400]
 
 Lets attempt to access the inventory API. Via your web browser
 ----
-http://{{ API_GATEWAY_ROUTE_HOST }}
-----
-
-Lets attempt to access the inventory API. Via your web browser
-----
-http://{{ API_GATEWAY_ROUTE_HOST }}
+API_GATEWAY_ROUTE_HOST=$(oc get routes | grep gateway  | awk '{print $2}')
+echo "COPY  LINK TO BROWSER: http://${API_GATEWAY_ROUTE_HOST}" 
+echo "Run curl command: curl http://${API_GATEWAY_ROUTE_HOST}/api/products"
 ----
 
 Lets attempt to access the CoolStore application. Via your web browser

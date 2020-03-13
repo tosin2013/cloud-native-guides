@@ -58,4 +58,4 @@
     vars:
       infra_project_name: "{{ 'infra%d' | format(item) }}"
       project_name: "{{ 'coolstore%d' | format(item) }}"
-    loop: "{{ range(1, 100 )|list }}"
+    loop: "{{ range(1, 1 )|list }}"

@@ -19,6 +19,16 @@ spec:
   channel: preview
 EOF
 
+
+cat >prometheus-additional.yaml<<EOF
+- job_name: "throntail-inventory"
+  static_configs:
+      - targets: ["inventory.${projectname}.svc.cluster.local:8080"]
+EOF
+
+oc create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run -oyaml > additional-scrape-configs.yaml
+oc create -f additional-scrape-configs.yaml 
+
 cat <<EOF |  oc create -f -
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -36,6 +46,9 @@ spec:
     matchExpressions:
       - key: k8s-app
         operator: Exists
+  additionalScrapeConfigs:
+    name: additional-scrape-configs
+    key: prometheus-additional.yaml
   ruleSelector:
     matchLabels:
       role: prometheus-rulefiles
@@ -120,6 +133,7 @@ EOF
 if [  ! -f grafana-configmap.yml  ]; then 
   curl -OL https://raw.githubusercontent.com/tosin2013/cloud-native-guides/82cf435c635aa5a96a32ea5f07361e2e3c25afd3/apb/playbooks/templates/grafana/grafana-configmap.yml
 fi 
+sed -i 's/    namespace:.*/    namespace: "'${infraprojectname}'"/g' grafana-configmap.yml
 oc create configmap grafana-config --from-file=grafana-configmap.yml -n "${infraprojectname}"
 
 
@@ -186,3 +200,5 @@ spec:
 EOF
 
 oc expose service/grafana-ip-service -n ${infraprojectname}
+
+oc adm pod-network join-projects --to=
