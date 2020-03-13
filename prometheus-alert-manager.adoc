@@ -1,1 +1,10 @@
 == Prometheus Alert Manager
+
+---
+$ oc project infra1
+---
+
+---
+oc edit cm prometheus-server-rulefiles-0
+---
+
