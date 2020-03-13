@@ -126,7 +126,8 @@ Explore different queries using `inventory` as the key word.
 [square]
 * Click on Add source select `Prometheus`
 * add URL {{PROMETHEUS_ROUTE_HOST}}
-* image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
+
+image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
 
 click on `Save & Test`
 Navigate to the explore tab
