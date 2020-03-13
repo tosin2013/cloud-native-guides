@@ -117,11 +117,13 @@ Explore different queries using `inventory` as the key word.
 *Navigate to the Grafana dashboard* +
 {{GRAFANA_ROUTE_HOST}}  
 
-.Login with   
+.Login with
+[square]
 * username: admin  
 * password: admin  
 
 .Change the password to `openshift`
+[square]
 * Click on Add source select `Prometheus`
 * add URL {{PROMETHEUS_ROUTE_HOST}}
 * image::{% image_path grafana-config.png %}[Grafana Queries,800,600]
