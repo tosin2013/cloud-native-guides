@@ -53,15 +53,6 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 ----
 
-add the following to line 13
-----
-    // tag::metrics-resource-method[]
-----
-
-Add the following to line 33
-----
-    // end::metrics-resource-method[]
-----
 
 Add the the following code to lines 20-21
 `@Counted` is used to keep track of how many times this method was invoked
@@ -77,15 +68,19 @@ Add the the following code to lines 20-21
 @Timed(name = "inventory-time", absolute = true)
 ----
 
-Delete old build config on OpenShift
+Delete the older inventory thorntail build in the project
 ----
-$ oc delete build inventory-s2i
+$ oc delete bc/inventory-s2i
+buildconfig.build.openshift.io "inventory-s2i" deleted
 ----
 
-In CodeReady Workspaces, `*right click on 'inventory-thorntail'*` project in the project explorer
-then, `*click on 'Commands > Deploy > fabric8:deploy'*`
+Click on the inventory-thorntail
+We will now build the inventory thorntail project
+image:{% image_path prepare-build.png %}[CodeReady Build, 400]
 
-image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
+Now deploy the project using fabric8
+image:{% image_path prepare-fabric8.png %}[CodeReady  Fabric8, 400]
+
 
 *Testing  Prometheus dashboard*  
 Get inventory endpoint  
