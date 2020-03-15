@@ -18,7 +18,7 @@
     gogs_pwd: openshift
     infrasvcs_adm_user: adminuser
     infrasvcs_adm_pwd: adminpwd
-    user_count: 1
+    user_count: 5
     openshift_service_mesh_installation: false
     preconfigure_service_mesh_projects: false
     preconfigure_coolstore_project: true
@@ -242,15 +242,6 @@
   #  set_fact:
   #    grafana_url: "http://{{ grafana_host.stdout }}"
 #    when: preconfigure_service_mesh_projects == true
-
-  # remove me
-  - name: Start playbook here
-    block:
-      - shell: "oc get route console -n openshift-console -o 'jsonpath={.spec.host}'"
-        register: console_route
-      - set_fact:
-          apps_hostname_suffix: "tosin-9865.open.redhat.com"
-    tags: always
 
   # Preconfigure Projects for Service Mesh usage
   - name: preconfigure projects for logging and monitoring
