@@ -18,7 +18,7 @@
     gogs_pwd: openshift
     infrasvcs_adm_user: adminuser
     infrasvcs_adm_pwd: adminpwd
-    user_count: 5
+    user_count: 1
     openshift_service_mesh_installation: false
     preconfigure_service_mesh_projects: false
     preconfigure_coolstore_project: true
@@ -250,7 +250,6 @@
       username: "{{ 'user%d' | format(item) }}"
       project_name: "{{ 'coolstore%d' | format(item) }}"
       infra_project_name: "{{ 'infra%d' | format(item) }}"
-      apps_hostname_suffix: "tosin-9865.open.redhat.com"
     loop: "{{ range(1, user_count|int + 1) | list }}"
 
     # Preconfigure Projects for Cool Store Deployment
