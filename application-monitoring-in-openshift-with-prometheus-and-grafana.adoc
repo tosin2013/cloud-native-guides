@@ -93,7 +93,6 @@ echo  $INVENTORY_ROUTE_HOST
 ---- 
 $ curl http://${INVENTORY_ROUTE_HOST}/metrics
 ----
-link:http://${INVENTORY_ROUTE_HOST}/metrics[Verify the metrics endpoint exists]
 
 
 *Run a load test against the endpoint below.*
