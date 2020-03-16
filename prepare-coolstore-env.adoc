@@ -64,7 +64,7 @@ Lets attempt to access the inventory API. Via your web browser
 ----
 INVENTORY_ROUTE_HOST=$(oc get routes | grep inventory  | awk '{print $2}')
 echo "COPY  LINK TO BROWSER: http://${INVENTORY_ROUTE_HOST}" 
-echo "Run curl command: curl http://${CATALOG_INVENTORY_ROUTE_HOSTOUTE_HOST}/api/inventory/329299"
+echo "Run curl command: curl http://${INVENTORY_ROUTE_HOST}/api/inventory/329299"
 ----
 
 
