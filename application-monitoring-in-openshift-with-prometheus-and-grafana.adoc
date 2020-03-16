@@ -54,7 +54,7 @@ import org.eclipse.microprofile.metrics.annotation.Timed;
 ----
 
 
-Add the the following code to lines 20-21
+Add the the following code to lines 19-26
 `@Counted` is used to keep track of how many times this method was invoked
 `@Timed` is used to keep track of how long the invocations took
 ----

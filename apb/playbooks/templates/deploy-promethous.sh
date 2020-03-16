@@ -29,6 +29,59 @@ EOF
 oc create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --dry-run -oyaml > additional-scrape-configs.yaml
 oc create -f additional-scrape-configs.yaml 
 
+cat <<EOF | oc create -f -
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  creationTimestamp: null
+  labels:
+    prometheus: server
+    role: alert-rules
+  name: prometheus-server-rules
+spec:
+  groups:
+  - name: CPU Load Average Alert
+    rules:
+    - alert: "CPU Load Average able 0.1"
+      expr: (base:cpu_system_load_average) > 0.1
+      annotations:
+        miqTarget: "LoadAverage"
+        severity: "WARNING"
+        url: "https://www.example.com/node_average_alerting"
+        message: "Node {{$labels.instance}} is high"
+EOF
+
+
+cat <<EOF  |  oc create -f -
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: server
+  labels:
+    prometheus: k8s
+  namespace: ${infraprojectname}
+spec:
+  securityContext: {}
+  replicas: 1
+EOF
+
+cat >alertmanager.yaml<<EOF
+global:
+  resolve_timeout: 5m
+route:
+  group_by: ['job']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  receiver: 'alert-buffer-wh'
+receivers:
+  - name: alert-buffer-wh
+    webhook_configs:
+    - url: http://localhost:9099/topics/alerts
+EOF
+
+oc create secret generic alertmanager-server --from-file=alertmanager.yaml
+
 cat <<EOF |  oc create -f -
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -39,6 +92,11 @@ metadata:
   namespace: ${infraprojectname}
 spec:
   replicas: 2
+  alerting:
+    alertmanagers:
+      - namespace: ${infraprojectname}
+        name: alertmanager-operated
+        port: web
   version: v2.3.2
   serviceAccountName: prometheus-k8s
   securityContext: {}
@@ -46,18 +104,13 @@ spec:
     matchExpressions:
       - key: k8s-app
         operator: Exists
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+      prometheus: server
   additionalScrapeConfigs:
     name: additional-scrape-configs
     key: prometheus-additional.yaml
-  ruleSelector:
-    matchLabels:
-      role: prometheus-rulefiles
-      prometheus: k8s
-  alerting:
-    alertmanagers:
-      - namespace: ${infraprojectname}
-        name: alertmanager-main
-        port: web
 EOF
 
 cat << EOF | oc create -n "${projectname}" -f -
