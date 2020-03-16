@@ -1,5 +1,8 @@
 == Prometheus Alert Manager
 
+=== Prerequisites
+Please complete lab `Application monitoring in OpenShift with Prometheus and Grafana` before continuing.
+
 === Example Alert Config
 ----
 groups:
