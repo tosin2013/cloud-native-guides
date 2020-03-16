@@ -14,7 +14,7 @@ groups:
       summary: High request latency
 ----
 
-.Alert Manger Rules brake Down
+.Alert Manger rules brake down
 * Rules and be organized into `groups:`  
 * `name:` is the name of the alert rule
 * `alert:`
@@ -26,7 +26,7 @@ groups:
 
 *Switch to infra project*
 ----
-$ oc project {{ INFRA_PROJECT }}
+$ oc project {{INFRA_PROJECT}}
 ----
 
 *Review Defined Promethous Alert in ConfigMap*
