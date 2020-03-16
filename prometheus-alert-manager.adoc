@@ -15,13 +15,13 @@ groups:
 ----
 
 .Alert Manger rules brake down
-* Rules and be organized into `groups:`  
-* `name:` is the name of the alert rule
-* `alert:`
-* `expr:`
-* `for:`
-* `labels:->severity:`
-* `annotations:->summary:`
+* Rules and be organized into `groups:`.
+* `name:` is the name of the alert rule.
+* `alert:` is the name of the alert.
+* `expr:` is the PromQL expression to evaluate.
+* `for:` defines how long alert has returned before they begin to fire.
+* `labels:->severity:` defines the severity of the alert.
+* `annotations:->summary:` will define the details of the alert that you would like your end user to know about. 
 
 
 *Switch to infra project*
