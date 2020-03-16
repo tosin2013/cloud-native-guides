@@ -29,7 +29,7 @@ groups:
 $ oc project {{INFRA_PROJECT}}
 ----
 
-*Review Defined Promethous Alert in ConfigMap*
+*Review defined Promethous alert in ConfigMap*
 ----
 $ oc edit prometheus-server-rulefiles-0
 ----
@@ -50,12 +50,12 @@ echo  $INVENTORY_ROUTE_HOST
 $ curl http://${INVENTORY_ROUTE_HOST}/metrics
 ----
 
-*Trigger Alert*
+*Trigger alert*
 ----
 siege -c 200 -t 90 -d 3 http://${INVENTORY_ROUTE_HOST}/api/inventory/329299
 ----
 
-*View Alert DashBoard via web browser*
+*View alert dashboard via web browser*
 ----
 {{PROMETHEUS_ROUTE_HOST}}/alerts
 ----
