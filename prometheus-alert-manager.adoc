@@ -1,10 +1,63 @@
 == Prometheus Alert Manager
 
+=== Example Alert Config
 ----
-$ oc project infra1
+groups:
+- name: example
+  rules:
+  - alert: HighRequestLatency
+    expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+    for: 10m
+    labels:
+      severity: page
+    annotations:
+      summary: High request latency
 ----
 
+.Alert Manger Rules brake Down
+* Rules and be organized into `groups:`  
+* `name:` is the name of the alert rule
+* `alert:`
+* `expr:`
+* `for:`
+* `labels:->severity:`
+* `annotations:->summary:`
+
+
+*Switch to infra project*
 ----
-oc edit cm prometheus-server-rulefiles-0
+$ oc project {{ INFRA_PROJECT }}
 ----
+
+*Review Defined Promethous Alert in ConfigMap*
+----
+$ oc edit prometheus-server-rulefiles-0
+----
+
+*Switch back to application project*
+----
+$ oc project {{COOLSTORE_PROJECT}}
+----
+
+*Get inventory endpoint*
+----
+INVENTORY_ROUTE_HOST=$(oc get routes | grep inventory  | awk '{print $2}')
+echo  $INVENTORY_ROUTE_HOST
+----
+
+*Verify the metrics endpoint exists*
+---- 
+$ curl http://${INVENTORY_ROUTE_HOST}/metrics
+----
+
+*Trigger Alert*
+----
+siege -c 200 -t 90 -d 3 http://${INVENTORY_ROUTE_HOST}/api/inventory/329299
+----
+
+*View Alert DashBoard via web browser*
+----
+{{PROMETHEUS_ROUTE_HOST}}/alerts
+----
+
 
