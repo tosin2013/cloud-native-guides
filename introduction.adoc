@@ -11,7 +11,6 @@ We will go through the following exercises below:
 * Debugging Cloud Native Applications on OpenShift
 * Kibana Dashboard for Developers 
 * Application monitoring in OpenShift with Prometheus and Grafana
-* Creating a Dashboard with custom graphs
 * Prometheus Alert Manager
 * Exporters
 * How to do Upgrades

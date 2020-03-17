@@ -1,4 +1,4 @@
-Welcome to the Cloud Native Workshop.
+Welcome to the OpenShift Logging and Monitoring Workshop.
 
 If this is your first time using an Etherpad, it allows EVERYONE to edit
 documents collaboratively in real-time, much like a live multi-player editor

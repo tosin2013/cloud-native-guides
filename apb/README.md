@@ -1,4 +1,4 @@
-Cloud-Native Workshop Installer
+OpenShift  Logging and Monitoring Workshop Installer
 =========
 
 The provided Ansible Playbook Bundle automates preparing an OpenShift cluster for the Cloud-Native Labs 
