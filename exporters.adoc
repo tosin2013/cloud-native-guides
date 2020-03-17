@@ -57,6 +57,7 @@ NOTE | if you would like to run this please run the following.
 
 .Prerequisites
 * prometheus_client
+* pip installed on workstation or laptop
 
 *Install prometheus_client*
 ----
