@@ -1,3 +1,107 @@
 == Exporters
  
- Exporter are a set of libararies that help in exporting existing metrics from third party systems as Prometheus metrics
+Exporter are a set of libraries that help in exporting existing metrics from third party systems as Prometheus metrics
+
+*Third party exporters* are written by other organizations that intergrate with the Prometheus platform.  
+
+.Prometheus exporter types
+* Third-party exporters
+* Databases
+* Hardware related
+* Issue trackers and continuous integration
+* Messaging systems
+* Storage
+* HTTP
+* APIs
+* Logging
+* Other monitoring systems
+* Miscellaneous
+
+As a developer you can create your own exporter. Below is a example of custom exporter written in python. 
+
+----
+$ cat python metric-example.py &
+from prometheus_client import start_http_server, Summary
+import random
+import time
+
+# Create a metric to track time spent and requests made.
+REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+
+ADDITIONAL_CUSTOM_COUNTER = Summary('my_custom_counter', 'Example custom metric')
+
+# Decorate function with metric.
+@REQUEST_TIME.time()
+def process_request(t):
+ """A dummy function that takes some time."""
+ time.sleep(t)
+
+@ADDITIONAL_CUSTOM_COUNTER.time()
+def my_custom_function():
+ a = 0
+ while a < 10:
+        a = a + 1
+ time.sleep(a)
+
+if __name__ == '__main__':
+  # Start up the server to expose the metrics.
+ print "starting"
+ start_http_server(8000)
+ # Generate some requests.
+ while True:
+   process_request(random.random())
+   my_custom_function()
+----
+
+NOTE | if you would like to run this please run the following. 
+
+.Prerequisites
+* prometheus_client
+
+*Install prometheus_client*
+----
+$ pip install prometheus_client
+----
+
+*Run script*
+----
+$ python metric-example.py &
+----
+
+*Example Output*
+----
+$ curl localhost:8000
+# HELP request_processing_seconds Time spent processing request
+# TYPE request_processing_seconds summary
+request_processing_seconds_count 6.0
+request_processing_seconds_sum 3.3520710468292236
+# TYPE request_processing_seconds_created gauge
+request_processing_seconds_created 1.584419639876949e+09
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="2",minor="7",patchlevel="17",version="2.7.17"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 2.62959104e+08
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.5671296e+07
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.58441963876e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.31
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 7.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP my_custom_counter Example Custom Metric
+# TYPE my_custom_counter summary
+my_custom_counter_count 5.0
+my_custom_counter_sum 50.05087089538574
+# TYPE my_custom_counter_created gauge
+my_custom_counter_created 1.584419639877003e+09
+----

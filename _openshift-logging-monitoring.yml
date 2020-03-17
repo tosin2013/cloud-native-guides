@@ -43,5 +43,4 @@ modules:
   - application-monitoring-in-openshift-with-prometheus-and-grafana
   - prometheus-alert-manager
   - exporters
-  - how-to-do-upgrades
   - env-info
