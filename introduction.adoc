@@ -13,7 +13,6 @@ We will go through the following exercises below:
 * Application monitoring in OpenShift with Prometheus and Grafana
 * Prometheus Alert Manager
 * Exporters
-* How to do Upgrades
 
 The outcome is you will be able to use tools technologies such as Kibana and Prometheus. To help you troubleshoot issues that you may run into while developing a cloud native application. 
 
