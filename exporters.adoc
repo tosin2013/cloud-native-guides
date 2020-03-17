@@ -19,6 +19,7 @@ Exporter are a set of libraries that help in exporting existing metrics from thi
 
 As a developer you can create your own exporter. Below is a example of custom exporter written in python. 
 
+==== Example Exporter
 ----
 $ cat python metric-example.py &
 from prometheus_client import start_http_server, Summary
@@ -53,7 +54,7 @@ if __name__ == '__main__':
    my_custom_function()
 ----
 
-NOTE | if you would like to run this please run the following. 
+NOTE: If you would like to run this please run the following. 
 
 .Prerequisites
 * prometheus_client
@@ -106,3 +107,6 @@ my_custom_counter_sum 50.05087089538574
 # TYPE my_custom_counter_created gauge
 my_custom_counter_created 1.584419639877003e+09
 ----
+
+
+Congratulations on completing the labs.
