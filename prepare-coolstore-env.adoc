@@ -1,4 +1,5 @@
 == Preparing  your coolstore environment 
+*10 MINUTE EXERCISE*
 
 ==== Lets start by verfiying are cool store is up and running. 
 

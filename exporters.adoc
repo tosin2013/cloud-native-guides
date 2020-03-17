@@ -1,5 +1,6 @@
 == Exporters
- 
+*10 MINUTE EXERCISE*
+
 Exporter are a set of libraries that help in exporting existing metrics from third party systems as Prometheus metrics
 
 *Third party exporters* are written by other organizations that intergrate with the Prometheus platform.  

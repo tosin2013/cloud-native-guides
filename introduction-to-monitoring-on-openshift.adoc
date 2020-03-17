@@ -1,4 +1,5 @@
 == Introduction to Monitoring on OpenShift
+*5 MINUTE EXERCISE*
 
 === Logging
 .OpenShift offers logging which aggregates logs for OpenShift platform services, Nodes, Containers and applications. The logging stack consists of the following components.

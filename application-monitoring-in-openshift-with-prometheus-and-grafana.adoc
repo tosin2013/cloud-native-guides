@@ -1,4 +1,5 @@
 == Application monitoring in OpenShift with Prometheus and Grafana
+*20 MINUTE EXERCISE*
 
 == What is Prometheus and Grafana
 **Prometheus** is  an open-source systems monitoring and alerting toolkit. Which was originally built at SoundCloud. Since its beginnings in 2012

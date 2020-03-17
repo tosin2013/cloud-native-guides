@@ -1,4 +1,5 @@
 == Kibana Dashboard for Developers 
+*20 MINUTE EXERCISE*
 
 Before we dive into using the Kibana dashboard. We must first review what is the ELK stack.
 
