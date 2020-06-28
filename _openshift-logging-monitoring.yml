@@ -7,6 +7,7 @@ content:
 vars:
   OPENSHIFT_DOCS_BASE: "https://docs.openshift.com/container-platform/3.11"
   COOLSTORE_PROJECT: "coolstore"
+  INFRA_PROJECT: "infra"
   DOWNLOAD_CLIENT_WINDOWS: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/windows/oc.zip
   DOWNLOAD_CLIENT_MAC: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/macosx/oc.tar.gz
   DOWNLOAD_CLIENT_LIN64: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/linux/oc.tar.gz
