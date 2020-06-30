@@ -44,8 +44,8 @@
         -e CONTENT_URL_PREFIX={{ workshopper_content_url_prefix }}
         -n {{ infra_project_name }}
   vars:
-    workshopper_content_url_prefix: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/{{ git_repository_guide_context }}"
-    workshopper_workshop_urls: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/{{ git_repository_guide_context }}/_cloud-native-workshop-{{ guide_name }}.yml"
+    workshopper_content_url_prefix: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}"
+    workshopper_workshop_urls: "https://raw.githubusercontent.com/{{ git_repository_guide_path }}/{{ git_repository_guide_reference }}/_cloud-native-workshop-{{ guide_name }}.yml"
   tags: guides
 - name: Expose Route
   command: >

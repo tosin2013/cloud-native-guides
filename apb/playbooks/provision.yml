@@ -12,7 +12,6 @@
     git_repository_lab_reference: ocp-3.11
     git_repository_guide_path: tosin2013/cloud-native-guides
     git_repository_guide_reference: ocp-3.11
-    git_repository_guide_context:
     guide_name: codeready
     gogs_dev_user: developer
     gogs_pwd: openshift
